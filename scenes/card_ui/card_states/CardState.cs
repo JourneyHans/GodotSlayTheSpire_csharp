@@ -1,8 +1,7 @@
-using framework.tag;
 using Godot;
 
 [GlobalClass]
-public abstract partial class CardState : TagNode {
+public abstract partial class CardState : Node {
     public enum EState {
         Base,
         Clicked,

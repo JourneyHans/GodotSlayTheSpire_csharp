@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using framework.tag;
 using Godot;
 
-public partial class CardStateMachine : TagNode {
+public partial class CardStateMachine : Node {
 	[Export] public CardState InitialState;
 
 	private CardState _currentState;
@@ -41,12 +40,12 @@ public partial class CardStateMachine : TagNode {
 
 	private void OnTransitionRequested(CardState from, CardState.EState to) {
 		if (from != _currentState) {
-			PrintErr($"当前状态不匹配, from: {from}, _currentState: {_currentState}");
+			GD.PrintErr($"当前状态不匹配, from: {from}, _currentState: {_currentState}");
 			return;
 		}
 
 		if (!_states.TryGetValue(to, out CardState newState)) {
-			PrintErr($"不存在要切换的状态, to: {to}");
+			GD.PrintErr($"不存在要切换的状态, to: {to}");
 			return;
 		}
 

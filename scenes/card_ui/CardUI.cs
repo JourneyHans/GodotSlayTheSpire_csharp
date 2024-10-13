@@ -1,9 +1,8 @@
 using framework.extension;
-using framework.tag;
 using Godot;
 using Godot.Collections;
 
-public partial class CardUI : TagControl {
+public partial class CardUI : Control {
 	public const string ReparentRequested = "ReparentRequested";
 	
 	private Card _card;
@@ -120,7 +119,7 @@ public partial class CardUI : TagControl {
 
 	public void Play() {
 		if (Card == null) {
-			PrintErr("Card is null");
+			GD.PrintErr("Card is null");
 			return;
 		}
 

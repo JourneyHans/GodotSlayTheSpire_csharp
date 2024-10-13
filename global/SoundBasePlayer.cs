@@ -1,10 +1,9 @@
-using framework.tag;
 using Godot;
 
-public abstract partial class SoundBasePlayer : TagNode {
+public abstract partial class SoundBasePlayer : Node {
     public void Play(AudioStream audio, bool single = false) {
         if (audio == null) {
-            PrintErr("audio为空");
+            GD.PrintErr("audio为空");
             return;
         }
 
