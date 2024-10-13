@@ -1,9 +1,16 @@
+using framework.debug;
 using Godot;
 
 public abstract partial class SoundBasePlayer : Node {
+    private FinchLogger _logger;
+
+    public override void _Ready() {
+        _logger = new FinchLogger(this);
+    }
+
     public void Play(AudioStream audio, bool single = false) {
         if (audio == null) {
-            GD.PrintErr("audio为空");
+            _logger.Error("audio为空");
             return;
         }
 

@@ -1,3 +1,4 @@
+using framework.debug;
 using framework.extension;
 using Godot;
 using Godot.Collections;
@@ -44,6 +45,7 @@ public partial class CardUI : Control {
 	
 	public Control Parent { get; set; }
 	public Tween Tween { get;private set; }
+	private FinchLogger _logger;
 
 	// 卡牌是否可以被打出的标志（法力是否足够，是否被禁手等游戏逻辑标志）
 	private bool _playable = true;
@@ -66,6 +68,7 @@ public partial class CardUI : Control {
 	public bool Disabled { get; set; }
 
 	public override void _Ready() {
+		_logger = new FinchLogger(this);
 		_panel = GetNode<Panel>("Panel");
 		Cost = GetNode<Label>("Cost");
 		Icon = GetNode<TextureRect>("Icon");
@@ -119,7 +122,7 @@ public partial class CardUI : Control {
 
 	public void Play() {
 		if (Card == null) {
-			GD.PrintErr("Card is null");
+			_logger.Error("Card is null");
 			return;
 		}
 

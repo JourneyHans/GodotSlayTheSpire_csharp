@@ -14,7 +14,7 @@ public partial class BlockEffect : Effect {
                     player.Stats.Block += Amount;
                     break;
                 default:
-                    GD.PrintErr($"未定义实现: {target.GetType().Name}");
+                    Logger.Error($"未定义实现: {target.GetType().Name}");
                     return;
             }
 

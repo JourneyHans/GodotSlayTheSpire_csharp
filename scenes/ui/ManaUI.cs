@@ -29,7 +29,6 @@ public partial class ManaUI : Panel {
 
     private async void OnStatsChanged() {
         if (!IsNodeReady()) {
-            GD.Print("\tNot Ready");
             await this.WhenReady();
         }
 

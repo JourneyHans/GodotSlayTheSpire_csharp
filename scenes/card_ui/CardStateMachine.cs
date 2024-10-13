@@ -1,11 +1,17 @@
 using System.Collections.Generic;
+using framework.debug;
 using Godot;
 
 public partial class CardStateMachine : Node {
 	[Export] public CardState InitialState;
 
 	private CardState _currentState;
-	private Dictionary<CardState.EState, CardState> _states = new();
+	private readonly Dictionary<CardState.EState, CardState> _states = new();
+	private FinchLogger _logger;
+
+	public override void _Ready() {
+		_logger = new FinchLogger(this);
+	}
 
 	public void Init(CardUI card) {
 		foreach (Node child in GetChildren()) {
@@ -40,12 +46,12 @@ public partial class CardStateMachine : Node {
 
 	private void OnTransitionRequested(CardState from, CardState.EState to) {
 		if (from != _currentState) {
-			GD.PrintErr($"当前状态不匹配, from: {from}, _currentState: {_currentState}");
+			_logger.Error($"当前状态不匹配, from: {from}, _currentState: {_currentState}");
 			return;
 		}
 
 		if (!_states.TryGetValue(to, out CardState newState)) {
-			GD.PrintErr($"不存在要切换的状态, to: {to}");
+			_logger.Error($"不存在要切换的状态, to: {to}");
 			return;
 		}
 
