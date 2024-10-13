@@ -1,0 +1,49 @@
+[gd_scene load_steps=14 format=3 uid="uid://dyk8pyk1cy3gq"]
+
+[ext_resource type="Script" path="res://scenes/enemy/EnemyActionPicker.cs" id="1_uiphw"]
+[ext_resource type="Script" path="res://enemies/crab/CrabAttackAction.cs" id="2_aqukv"]
+[ext_resource type="Script" path="res://enemies/crab/CrabBlockAction.cs" id="3_2ta21"]
+[ext_resource type="Texture2D" uid="uid://bfvi02kojsa00" path="res://art/tile_0103.png" id="3_xfqgw"]
+[ext_resource type="Script" path="res://custom_resources/Intent.cs" id="4_cl1dn"]
+[ext_resource type="Script" path="res://enemies/crab/CrabMegaBlockAction.cs" id="4_le24i"]
+[ext_resource type="AudioStream" uid="uid://de2ryat1pxq6" path="res://art/enemy_attack.ogg" id="5_3tcoo"]
+[ext_resource type="Texture2D" uid="uid://bi6pfjs32f820" path="res://art/tile_0101.png" id="6_jb0fd"]
+[ext_resource type="AudioStream" uid="uid://k8m4o3hlwm7l" path="res://art/enemy_block.ogg" id="8_q3be1"]
+[ext_resource type="Texture2D" uid="uid://oe7v35ii8vrs" path="res://art/tile_0102.png" id="8_tahlr"]
+
+[sub_resource type="Resource" id="Resource_yqila"]
+script = ExtResource("4_cl1dn")
+Number = "7"
+Icon = ExtResource("3_xfqgw")
+
+[sub_resource type="Resource" id="Resource_tf2cn"]
+script = ExtResource("4_cl1dn")
+Number = ""
+Icon = ExtResource("6_jb0fd")
+
+[sub_resource type="Resource" id="Resource_vfjcw"]
+script = ExtResource("4_cl1dn")
+Number = ""
+Icon = ExtResource("8_tahlr")
+
+[node name="CrabEnemyAI" type="Node"]
+script = ExtResource("1_uiphw")
+
+[node name="AttackAction" type="Node" parent="."]
+script = ExtResource("2_aqukv")
+Intent = SubResource("Resource_yqila")
+Sound = ExtResource("5_3tcoo")
+Type = 1
+ChanceWeight = 1.0
+
+[node name="BlockAction" type="Node" parent="."]
+script = ExtResource("3_2ta21")
+Intent = SubResource("Resource_tf2cn")
+Sound = ExtResource("8_q3be1")
+Type = 1
+ChanceWeight = 1.0
+
+[node name="MegaBlockAction" type="Node" parent="."]
+script = ExtResource("4_le24i")
+Intent = SubResource("Resource_vfjcw")
+Sound = ExtResource("8_q3be1")
