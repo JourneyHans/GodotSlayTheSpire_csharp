@@ -1,5 +1,6 @@
 using framework.debug;
 using framework.extension;
+using framework.utils;
 using Godot;
 using Godot.Collections;
 
@@ -10,13 +11,13 @@ public partial class CardUI : Control {
 	public int OriginalIndex;
 
 	public StyleBoxFlat BaseStyleBox =
-		ResourceLoader.Load<StyleBoxFlat>("res://scenes/card_ui/card_base_style_box.tres");
+		SimpleLoader.LoadResource<StyleBoxFlat>("res://scenes/card_ui/card_base_style_box");
 
 	public StyleBoxFlat HoverStyleBox =
-		ResourceLoader.Load<StyleBoxFlat>("res://scenes/card_ui/card_hover_style_box.tres");
+		SimpleLoader.LoadResource<StyleBoxFlat>("res://scenes/card_ui/card_hover_style_box");
 
 	public StyleBoxFlat DraggingStyleBox =
-		ResourceLoader.Load<StyleBoxFlat>("res://scenes/card_ui/card_dragging_style_box.tres");
+		SimpleLoader.LoadResource<StyleBoxFlat>("res://scenes/card_ui/card_dragging_style_box");
 
 	[Export]
 	public Card Card {

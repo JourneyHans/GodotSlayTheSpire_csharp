@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CharacterStats" load_steps=4 format=3 uid="uid://c8qpqr0yg7ayv"]
+
+[ext_resource type="Texture2D" uid="uid://dpfqok8tuy4r7" path="res://art/tile_0084.png" id="1_a562s"]
+[ext_resource type="Resource" uid="uid://d1tgwgvacmxau" path="res://characters/warrior/warrior_starting_deck.tres" id="2_nb32e"]
+[ext_resource type="Script" path="res://custom_resources/CharacterStats.cs" id="3_85xdw"]
+
+[resource]
+script = ExtResource("3_85xdw")
+CharacterName = "Wizard"
+Description = "Years of wisdom and
+recurring back pain."
+Portrait = ExtResource("1_a562s")
+StartingDeck = ExtResource("2_nb32e")
+CardsPerTurn = 3
+MaxMana = 4
+MaxHealth = 27
+Art = ExtResource("1_a562s")

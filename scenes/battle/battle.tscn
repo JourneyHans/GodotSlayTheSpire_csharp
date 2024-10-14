@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cpu7vi7jq4pmm" path="res://scenes/enemy/enemy.tscn" id="2_k8hiy"]
 [ext_resource type="PackedScene" uid="uid://s0bbemrrpms" path="res://scenes/player/player.tscn" id="3_jwy1k"]
 [ext_resource type="AudioStream" uid="uid://dpdenqqbovwfq" path="res://art/8_bit_iced_village_lofi.mp3" id="3_t36dg"]
-[ext_resource type="Resource" uid="uid://b2p1pebwy5c4w" path="res://characters/warrior.tres" id="4_s8lwv"]
+[ext_resource type="Resource" uid="uid://b2p1pebwy5c4w" path="res://characters/warrior/warrior.tres" id="4_s8lwv"]
 [ext_resource type="Script" path="res://scenes/enemy/EnemyHandler.cs" id="4_ugvp0"]
 [ext_resource type="Resource" uid="uid://clqlde1au0g58" path="res://enemies/crab/crab_enemy.tres" id="5_xnyvr"]
 [ext_resource type="Script" path="res://scenes/ui/BattleUI.cs" id="7_ufsyl"]

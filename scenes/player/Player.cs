@@ -1,5 +1,6 @@
 using System;
 using framework.extension;
+using framework.utils;
 using Godot;
 
 public partial class Player : Node2D {
@@ -20,7 +21,7 @@ public partial class Player : Node2D {
     }
 
     public override void _Ready() {
-        _whiteSpriteMatRes = ResourceLoader.Load<Material>("res://art/white_sprite_material.tres");
+        _whiteSpriteMatRes = SimpleLoader.LoadResource<Material>("res://art/white_sprite_material");
         
         _sprite = GetNode<Sprite2D>("Sprite2D");
         _statsUI = GetNode<StatsUI>("StatsUI");

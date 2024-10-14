@@ -60,3 +60,9 @@ public partial class Battle : Node2D {
             BattleOverPanel.Type.Lose);
     }
 }
+
+public partial class Battle {
+    public static class Event {
+        public const string BattleWon = "BattleWon";
+    }
+}

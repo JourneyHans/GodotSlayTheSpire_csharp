@@ -1,9 +1,10 @@
+using framework.utils;
 using Godot;
 
 public partial class Hand : HBoxContainer {
 	[Export] public CharacterStats CharacterStats { get; set; }
 
-	private PackedScene _cardUIScene = ResourceLoader.Load<PackedScene>("res://scenes/card_ui/card_ui.tscn");
+	private PackedScene _cardUIScene = SimpleLoader.LoadPackedScene("res://scenes/card_ui/card_ui");
 
 	public override void _Ready() {
 		EventDispatcher.RegEventListener<CardUI>(CardUI.ReparentRequested, OnReparentRequested);

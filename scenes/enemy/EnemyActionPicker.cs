@@ -10,8 +10,7 @@ public partial class EnemyActionPicker : Node {
         get => _enemy;
         set {
             _enemy = value;
-            foreach (Node child in GetChildren()) {
-                var action = (EnemyAction)child;
+            foreach (EnemyAction action in GetChildren()) {
                 action.Enemy = _enemy;
             }
         }
@@ -37,8 +36,8 @@ public partial class EnemyActionPicker : Node {
     }
 
     private void SetupChances() {
-        foreach (Node child in GetChildren()) {
-            if (child is not EnemyAction { Type: EnemyAction.EType.ChanceBased } action) {
+        foreach (EnemyAction action in GetChildren()) {
+            if (action.Type != EnemyAction.EType.ChanceBased) {
                 continue;
             }
 
