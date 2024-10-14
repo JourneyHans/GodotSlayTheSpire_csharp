@@ -1,9 +1,8 @@
-using System;
-using Godot;
-
 namespace framework.debug;
 
 public class FinchLogger {
+    public static ILogHandler LogHandler;
+    
     private readonly string _tag;
     private readonly bool _enabled;
 
@@ -22,7 +21,7 @@ public class FinchLogger {
             return;
         }
 
-        GD.Print(stackTrace ? $"[{_tag}] {log}\n{StackTrace}" : $"[{_tag}] {log}");
+        LogHandler?.Log(stackTrace ? $"[{_tag}] {log}\n{StackTrace}" : $"[{_tag}] {log}");
     }
 
     public void Warning(string log, bool stackTrace = false) {
@@ -30,7 +29,7 @@ public class FinchLogger {
             return;
         }
 
-        GD.PushWarning(stackTrace ? $"[{_tag}] {log}\n{StackTrace}" : $"[{_tag}] {log}");
+        LogHandler?.Warning(stackTrace ? $"[{_tag}] {log}\n{StackTrace}" : $"[{_tag}] {log}");
     }
 
     public void Error(string log, bool stackTrace = true) {
@@ -38,6 +37,6 @@ public class FinchLogger {
             return;
         }
 
-        GD.PrintErr(stackTrace ? $"[{_tag}] {log}\n{StackTrace}" : $"[{_tag}] {log}");
+        LogHandler?.Error(stackTrace ? $"[{_tag}] {log}\n{StackTrace}" : $"[{_tag}] {log}");
     }
 }

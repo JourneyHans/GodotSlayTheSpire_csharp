@@ -17,6 +17,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
+GDLogHandler="*res://global/GDLogHandler.cs"
 ConfigInit="*res://global/ConfigInit.cs"
 MusicPlayer="*res://global/music_player.tscn"
 SFXPlayer="*res://global/sfx_player.tscn"
