@@ -27,6 +27,7 @@ public partial class Battle : Node2D {
         _enemyHandler.ChildOrderChanged += OnEnemiesChildOrderChanged;
 
         StartBattle(newStat);
+        _battleUI.InitializedCardPileUI();
     }
 
     protected override void Dispose(bool disposing) {

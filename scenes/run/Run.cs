@@ -14,7 +14,14 @@ public partial class Run : Node {
     private PackedScene _shopScene = SimpleLoader.LoadPackedScene("res://scenes/shop/shop");
     private PackedScene _treasureScene = SimpleLoader.LoadPackedScene("res://scenes/treasure_room/treasure_room");
 
+    #region onready
+    
     private Node _currentView;
+    private CardPileOpener _deckButton;
+    private CardPileView _deckView;
+    
+    #endregion
+    
     private CharacterStats _characterStats;
 
     private Dictionary<string, Action> _btnNameToPressed;
@@ -25,6 +32,8 @@ public partial class Run : Node {
         _logger = new FinchLogger(this);
         
         _currentView = GetNode<Node>("CurrentView");
+        _deckButton = GetNode<CardPileOpener>("%DeckButton");
+        _deckView = GetNode<CardPileView>("%DeckView");
 
         if (RunStartup == null) {
             _logger.Error("There is no RunStartup");
@@ -49,7 +58,8 @@ public partial class Run : Node {
     }
 
     private void StartRun() {
-        SetUpEventConnections();
+        SetupEventConnections();
+        SetupTopBar();
         _logger.Log("TODO: procedurally generate map");
     }
 
@@ -63,7 +73,13 @@ public partial class Run : Node {
         _currentView.AddChild(newView);
     }
 
-    private void SetUpEventConnections() {
+    private void SetupTopBar() {
+        _deckButton.CardPile = _characterStats.Deck;
+        _deckView.CardPile = _characterStats.Deck;
+        _deckButton.Pressed += () => { _deckView.ShowCurrentView("Deck"); };
+    }
+
+    private void SetupEventConnections() {
         EventDispatcher.RegEventListener(Battle.Event.BattleWon, OnBattleWon);
         EventDispatcher.RegEventListener(BattleReward.Event.BattleRewardExited, OnBattleRewardExited);
         EventDispatcher.RegEventListener(Campfire.Event.CampfireExited, OnCampfireExited);

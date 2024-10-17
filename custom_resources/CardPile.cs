@@ -6,8 +6,6 @@ using Godot.Collections;
 
 [GlobalClass]
 public partial class CardPile : Resource {
-    public const string CardPileSizeChanged = "CardPileSizeChanged";
-
     [Export] public Array<Card> Cards { get; private set; } = new();
 
     public bool IsEmpty => Cards.IsNullOrEmpty();
@@ -33,7 +31,7 @@ public partial class CardPile : Resource {
     }
 
     private void OnSizeChanged() {
-        EventDispatcher.TriggerEvent(CardPileSizeChanged, Cards.Count);
+        EventDispatcher.TriggerEvent(Event.CardPileSizeChanged, this);
     }
 
     public override string ToString() {
@@ -44,5 +42,15 @@ public partial class CardPile : Resource {
         }
 
         return sb.ToString();
+    }
+}
+
+public partial class CardPile {
+    public static class Event {
+        /// <summary>
+        /// 牌堆数量改变
+        /// 参数1：int-Cards.Count
+        /// </summary>
+        public const string CardPileSizeChanged = "CardPileSizeChanged";
     }
 }
