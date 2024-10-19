@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+namespace framework.events;
+
 public class EventException : Exception
 {
     public EventException(string message)

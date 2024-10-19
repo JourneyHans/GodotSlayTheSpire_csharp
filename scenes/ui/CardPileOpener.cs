@@ -1,3 +1,4 @@
+using framework.events;
 using Godot;
 
 public partial class CardPileOpener : TextureButton {
@@ -10,8 +11,7 @@ public partial class CardPileOpener : TextureButton {
         get => _cardPile;
         set {
             _cardPile = value;
-            EventDispatcher.UnRegEventListener<CardPile>(CardPile.Event.CardPileSizeChanged, OnCardPileSizeChanged);
-            EventDispatcher.RegEventListener<CardPile>(CardPile.Event.CardPileSizeChanged, OnCardPileSizeChanged);
+            EventDispatcher.SafeRegEventListener<CardPile>(CardPile.Event.CardPileSizeChanged, OnCardPileSizeChanged);
             OnCardPileSizeChanged(_cardPile);
         }
     }

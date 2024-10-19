@@ -8,6 +8,7 @@
 script = ExtResource("2_c2wep")
 Id = "warrior_axe_attack"
 Type = 0
+Rarity = 0
 Target = 1
 Cost = 1
 Icon = ExtResource("1_622di")

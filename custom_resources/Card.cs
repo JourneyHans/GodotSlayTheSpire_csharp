@@ -1,3 +1,4 @@
+using framework.events;
 using framework.extension;
 using Godot;
 using Godot.Collections;
@@ -9,6 +10,10 @@ public partial class Card : Resource {
         Skill,
         Power,
     }
+    
+    public enum ERarity {
+        Common, UnCommon, Rare
+    }
 
     public enum ETarget {
         Self,
@@ -17,11 +22,18 @@ public partial class Card : Resource {
         Everyone,
     }
 
+    public static readonly Dictionary<ERarity, Color> RarityToColor = new() {
+        { ERarity.Common, Colors.Gray },
+        { ERarity.UnCommon, Colors.CornflowerBlue },
+        { ERarity.Rare, Colors.Gold }
+    };
+
     [ExportGroup("Card Attributes")]
     [Export]
     public string Id { get; private set; }
 
     [Export] public EType Type { get; private set; }
+    [Export] public ERarity Rarity { get; private set; }
     [Export] public ETarget Target { get; private set; }
     [Export] public int Cost { get; private set; }
 

@@ -1,3 +1,4 @@
+using framework.events;
 using Godot;
 
 [GlobalClass]
@@ -9,6 +10,7 @@ public partial class CharacterStats : Stats {
     
     [ExportGroup("Gameplay Data")]
     [Export] public CardPile StartingDeck;
+    [Export] public CardPile DraftableCards;
     [Export] public int CardsPerTurn;
     [Export] public int MaxMana;
 

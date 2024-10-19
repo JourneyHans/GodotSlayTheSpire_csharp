@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using framework.debug;
+using framework.events;
 using framework.utils;
 using Godot;
 
@@ -17,11 +18,13 @@ public partial class Run : Node {
     #region onready
     
     private Node _currentView;
+    private GoldUI _goldUI;
     private CardPileOpener _deckButton;
     private CardPileView _deckView;
     
     #endregion
     
+    private RunStats _runStats;
     private CharacterStats _characterStats;
 
     private Dictionary<string, Action> _btnNameToPressed;
@@ -32,6 +35,7 @@ public partial class Run : Node {
         _logger = new FinchLogger(this);
         
         _currentView = GetNode<Node>("CurrentView");
+        _goldUI = GetNode<GoldUI>("%GoldUI");
         _deckButton = GetNode<CardPileOpener>("%DeckButton");
         _deckView = GetNode<CardPileView>("%DeckView");
 
@@ -58,12 +62,13 @@ public partial class Run : Node {
     }
 
     private void StartRun() {
+        _runStats = new RunStats();
         SetupEventConnections();
         SetupTopBar();
         _logger.Log("TODO: procedurally generate map");
     }
 
-    private void ChangeView(PackedScene scene) {
+    private Node ChangeView(PackedScene scene) {
         if (_currentView.GetChildCount() > 0) {
             _currentView.GetChild(0).QueueFree();
         }
@@ -71,9 +76,11 @@ public partial class Run : Node {
         GetTree().Paused = false;
         var newView = scene.Instantiate();
         _currentView.AddChild(newView);
+        return newView;
     }
 
     private void SetupTopBar() {
+        _goldUI.RunStats = _runStats;
         _deckButton.CardPile = _characterStats.Deck;
         _deckView.CardPile = _characterStats.Deck;
         _deckButton.Pressed += () => { _deckView.ShowCurrentView("Deck"); };
@@ -110,7 +117,13 @@ public partial class Run : Node {
     }
 
     private void OnBattleWon() {
-        ChangeView(_battleRewardScene);
+        var rewardScene = (BattleReward)ChangeView(_battleRewardScene);
+        rewardScene.RunStats = _runStats;
+        rewardScene.CharacterStats = _characterStats;
+        
+        // TODO: 临时测试代码
+        rewardScene.AddGoldReward(77);
+        rewardScene.AddCardReward();
     }
 
     private void OnBattleRewardExited() {

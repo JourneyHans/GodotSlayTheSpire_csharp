@@ -11,12 +11,17 @@ public static class GodotObjectExtension {
             _ => target.ToString()
         };
     }
-    
-    public static SignalAwaiter WhenReady(this GodotObject sender, GodotObject target = null) {
-        target ??= sender;
-        return sender.ToSignal(target, Node.SignalName.Ready);
+
+    public static SignalAwaiter WhenReady(this GodotObject target) {
+        return target.ToSignal(target, Node.SignalName.Ready);
     }
-    
+
+    public static void QueueFreeAllChildren(this Node parent) {
+        foreach (Node child in parent.GetChildren()) {
+            child.QueueFree();
+        }
+    }
+
     public static void Shake(this Node2D node2D, float strength, float duration, int shakeCount = 10) {
         if (node2D == null) {
             return;

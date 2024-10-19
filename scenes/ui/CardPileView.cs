@@ -1,3 +1,4 @@
+using framework.extension;
 using framework.utils;
 using Godot;
 using Godot.Collections;
@@ -18,18 +19,10 @@ public partial class CardPileView : Control {
         _cardTooltipPopup = GetNode<CardTooltipPopup>("%CardTooltipPopup");
         _backButton = GetNode<Button>("%BackButton");
         _backButton.Pressed += Hide;
-
-        foreach (Node card in _cards.GetChildren()) {
-            card.QueueFree();
-        }
+        
+        _cards.QueueFreeAllChildren();
 
         _cardTooltipPopup.HideTooltip();
-        
-        EventDispatcher.RegEventListener<Card>(CardTooltipPopup.Event.TooltipRequested, OnTooltipRequested);
-    }
-
-    protected override void Dispose(bool disposing) {
-        EventDispatcher.UnRegEventListener<Card>(CardTooltipPopup.Event.TooltipRequested, OnTooltipRequested);
     }
 
     public void ShowCurrentView(string title, bool randomized = false) {
@@ -56,6 +49,7 @@ public partial class CardPileView : Control {
             var newCard = _cardMenuUIScene.Instantiate<CardMenuUI>();
             _cards.AddChild(newCard);
             newCard.Card = card;
+            newCard.SetClickCall(OnTooltipRequested);
         }
         
         Show();
@@ -66,7 +60,7 @@ public partial class CardPileView : Control {
     }
 
     public override void _Input(InputEvent @event) {
-        if (@event.IsActionPressed("ui_cancel")) {
+        if (@event.IsActionPressed(InputKey.Esc)) {
             if (_cardTooltipPopup.Visible) {
                 _cardTooltipPopup.HideTooltip();
             }

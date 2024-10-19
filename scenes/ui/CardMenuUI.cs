@@ -1,13 +1,8 @@
+using System;
 using framework.extension;
-using framework.utils;
 using Godot;
 
 public partial class CardMenuUI : CenterContainer {
-    public StyleBoxFlat BaseStyleBox =
-        SimpleLoader.LoadResource<StyleBoxFlat>("res://scenes/card_ui/card_base_style_box");
-
-    public StyleBoxFlat HoverStyleBox =
-        SimpleLoader.LoadResource<StyleBoxFlat>("res://scenes/card_ui/card_hover_style_box");
 
     private Card _card;
 
@@ -17,18 +12,19 @@ public partial class CardMenuUI : CenterContainer {
         set => SetCard(value);
     }
 
-    private Panel _panel;
-    public Label Cost { get; private set; }
-    public TextureRect Icon { get; private set; }
+    private CardVisuals _visuals;
+    
+    private Action<Card> _clickCall;
 
     public override void _Ready() {
-        _panel = GetNode<Panel>("Visuals/Panel");
-        Cost = GetNode<Label>("Visuals/Cost");
-        Icon = GetNode<TextureRect>("Visuals/Icon");
-        
-        MouseEntered += OnMouseEntered;
-        MouseExited += OnMouseExited;
-        GuiInput += OnGuiInput;
+        _visuals = GetNode<CardVisuals>("Visuals");
+        _visuals.MouseEntered += OnMouseEntered;
+        _visuals.MouseExited += OnMouseExited;
+        _visuals.GuiInput += OnGuiInput;
+    }
+
+    public void SetClickCall(Action<Card> clickCall) {
+        _clickCall = clickCall;
     }
 
     private async void SetCard(Card card) {
@@ -37,21 +33,20 @@ public partial class CardMenuUI : CenterContainer {
         }
 
         _card = card;
-        Cost.Text = _card.Cost.ToString();
-        Icon.Texture = _card.Icon;
+        _visuals.Card = Card;
     }
 
     private void OnMouseEntered() {
-        _panel.Set("theme_override_styles/panel", HoverStyleBox);
+        _visuals.SetPanelStyle(CardVisuals.EPanelStyle.Hover);
     }
 
     private void OnMouseExited() {
-        _panel.Set("theme_override_styles/panel", BaseStyleBox);
+        _visuals.SetPanelStyle(CardVisuals.EPanelStyle.Base);
     }
 
     private void OnGuiInput(InputEvent @event) {
         if (@event.IsActionPressed(InputKey.LeftMouse)) {
-            EventDispatcher.TriggerEvent(CardTooltipPopup.Event.TooltipRequested, Card);
+            _clickCall?.Invoke(Card);
         }
     }
 }

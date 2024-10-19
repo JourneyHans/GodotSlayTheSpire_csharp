@@ -1,3 +1,4 @@
+using framework.events;
 using framework.extension;
 using Godot;
 
@@ -21,8 +22,7 @@ public partial class ManaUI : Panel {
 
     private void SetCharacterStats(CharacterStats stats) {
         _characterStats = stats;
-        EventDispatcher.UnRegEventListener(Stats.Event.StatsChanged, OnStatsChanged);
-        EventDispatcher.RegEventListener(Stats.Event.StatsChanged, OnStatsChanged);
+        EventDispatcher.SafeRegEventListener(Stats.Event.StatsChanged, OnStatsChanged);
         
         OnStatsChanged();
     }

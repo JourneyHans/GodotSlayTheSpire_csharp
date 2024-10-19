@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CardPile" load_steps=6 format=3 uid="uid://v1chmllputt1"]
+
+[ext_resource type="Script" path="res://custom_resources/CardPile.cs" id="1_88ra6"]
+[ext_resource type="Resource" uid="uid://bbp0bg67wthab" path="res://characters/warrior/cards/warrior_block.tres" id="2_4wq5k"]
+[ext_resource type="Resource" uid="uid://b48foe1uyheqr" path="res://characters/warrior/cards/warrior_slash.tres" id="3_b07ie"]
+[ext_resource type="Resource" uid="uid://c1uwn7vmsn56y" path="res://characters/warrior/cards/warrior_big_slam.tres" id="4_7l7ey"]
+[ext_resource type="Resource" uid="uid://siymf3a1ywwi" path="res://characters/warrior/cards/warrior_true_strength.tres" id="5_gg7oi"]
+
+[resource]
+script = ExtResource("1_88ra6")
+Cards = [ExtResource("2_4wq5k"), ExtResource("2_4wq5k"), ExtResource("3_b07ie"), ExtResource("4_7l7ey"), ExtResource("4_7l7ey"), ExtResource("4_7l7ey"), ExtResource("5_gg7oi"), ExtResource("5_gg7oi"), ExtResource("5_gg7oi")]

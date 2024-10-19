@@ -1,4 +1,5 @@
 using System;
+using framework.events;
 using framework.extension;
 using framework.utils;
 using Godot;
@@ -13,8 +14,7 @@ public partial class Player : Node2D {
     public CharacterStats Stats {
         get => _stats;
         set {
-            EventDispatcher.UnRegEventListener(global::Stats.Event.StatsChanged, OnUpdateStats);
-            EventDispatcher.RegEventListener(global::Stats.Event.StatsChanged, OnUpdateStats);
+            EventDispatcher.SafeRegEventListener(global::Stats.Event.StatsChanged, OnUpdateStats);
             _stats = value;
             UpdatePlayer();
         }

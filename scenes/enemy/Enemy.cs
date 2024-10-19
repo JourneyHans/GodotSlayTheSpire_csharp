@@ -1,3 +1,4 @@
+using framework.events;
 using framework.extension;
 using framework.utils;
 using Godot;
@@ -16,8 +17,7 @@ public partial class Enemy : Area2D {
     public EnemyStats Stats {
         get => _stats;
         private set {
-            EventDispatcher.UnRegEventListener(global::Stats.Event.StatsChanged, OnUpdateStats);
-            EventDispatcher.RegEventListener(global::Stats.Event.StatsChanged, OnUpdateStats);
+            EventDispatcher.SafeRegEventListener(global::Stats.Event.StatsChanged, OnUpdateStats);
             _stats = value.CreateInstance();
             UpdateEnemy();
         }

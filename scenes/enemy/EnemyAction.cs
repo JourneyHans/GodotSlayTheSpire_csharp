@@ -1,3 +1,4 @@
+using framework.events;
 using Godot;
 
 [GlobalClass]

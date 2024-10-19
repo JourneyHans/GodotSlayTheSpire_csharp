@@ -1,3 +1,4 @@
+using framework.events;
 using Godot;
 
 public partial class CardDraggingState : CardState {
@@ -11,7 +12,7 @@ public partial class CardDraggingState : CardState {
 			CardUI.Reparent(uiLayer);
 		}
 
-		CardUI.SetPanelStyleBox(CardUI.DraggingStyleBox);
+		CardUI.CardVisuals.SetPanelStyle(CardVisuals.EPanelStyle.Dragging);
 		EventDispatcher.TriggerEvent(Event.CardDragStarted, CardUI);
 
 		_minimumDragTimeElapsed = false;

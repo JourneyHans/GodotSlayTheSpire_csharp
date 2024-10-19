@@ -1,4 +1,5 @@
 using framework.debug;
+using framework.events;
 using framework.extension;
 using framework.utils;
 using Godot;
@@ -9,15 +10,6 @@ public partial class CardUI : Control {
 	
 	private Card _card;
 	public int OriginalIndex;
-
-	public StyleBoxFlat BaseStyleBox =
-		SimpleLoader.LoadResource<StyleBoxFlat>("res://scenes/card_ui/card_base_style_box");
-
-	public StyleBoxFlat HoverStyleBox =
-		SimpleLoader.LoadResource<StyleBoxFlat>("res://scenes/card_ui/card_hover_style_box");
-
-	public StyleBoxFlat DraggingStyleBox =
-		SimpleLoader.LoadResource<StyleBoxFlat>("res://scenes/card_ui/card_dragging_style_box");
 
 	[Export]
 	public Card Card {
@@ -31,14 +23,12 @@ public partial class CardUI : Control {
 		get => _characterStats;
 		set {
 			_characterStats = value;
-			EventDispatcher.UnRegEventListener(Stats.Event.StatsChanged, OnCharacterStatsChanged);
-			EventDispatcher.RegEventListener(Stats.Event.StatsChanged, OnCharacterStatsChanged);
+			EventDispatcher.SafeRegEventListener(Stats.Event.StatsChanged, OnCharacterStatsChanged);
 		}
 	}
 
-	private Panel _panel;
-	public Label Cost { get; private set; }
-	public TextureRect Icon { get; private set; }
+	public CardVisuals CardVisuals { get; private set; }
+	
 	public Area2D DropPointDetector { get; private set; }
 	public CardStateMachine CardStateMachine { get; private set; }
 
@@ -55,12 +45,12 @@ public partial class CardUI : Control {
 		private set {
 			_playable = value;
 			if (!_playable) {
-				Cost.AddThemeColorOverride("font_color", Colors.Red);
-				Icon.Modulate = new Color(1, 1, 1, 0.5f);
+				CardVisuals.Cost.AddThemeColorOverride("font_color", Colors.Red);
+				CardVisuals.Icon.Modulate = new Color(1, 1, 1, 0.5f);
 			}
 			else {
-				Cost.RemoveThemeColorOverride("font_color");
-				Icon.Modulate = new Color(1, 1, 1);
+				CardVisuals.Cost.RemoveThemeColorOverride("font_color");
+				CardVisuals.Icon.Modulate = new Color(1, 1, 1);
 			}
 		}
 	}
@@ -70,9 +60,7 @@ public partial class CardUI : Control {
 
 	public override void _Ready() {
 		_logger = new FinchLogger(this);
-		_panel = GetNode<Panel>("Panel");
-		Cost = GetNode<Label>("Cost");
-		Icon = GetNode<TextureRect>("Icon");
+		CardVisuals = GetNode<CardVisuals>("CardVisuals");
 		DropPointDetector = GetNode<Area2D>("DropPointDetector");
 		CardStateMachine = GetNode<CardStateMachine>("CardStateMachine");
 		CardStateMachine.Init(this);
@@ -108,12 +96,7 @@ public partial class CardUI : Control {
 		}
 
 		_card = card;
-		Cost.Text = _card.Cost.ToString();
-		Icon.Texture = _card.Icon;
-	}
-
-	public void SetPanelStyleBox(StyleBoxFlat theme) {
-		_panel.Set("theme_override_styles/panel", theme);
+		CardVisuals.Card = Card;
 	}
 
 	public void AnimateToPosition(Vector2 newPosition, float duration) {
