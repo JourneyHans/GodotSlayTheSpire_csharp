@@ -7,33 +7,34 @@ using Godot;
 
 public partial class Run : Node {
     private FinchLogger _logger;
-    
+
     private PackedScene _battleScene = SimpleLoader.LoadPackedScene("res://scenes/battle/battle");
     private PackedScene _battleRewardScene = SimpleLoader.LoadPackedScene("res://scenes/battle_reward/battle_reward");
     private PackedScene _campfireScene = SimpleLoader.LoadPackedScene("res://scenes/campfire/campfire");
-    private PackedScene _mapScene = SimpleLoader.LoadPackedScene("res://scenes/map/map");
     private PackedScene _shopScene = SimpleLoader.LoadPackedScene("res://scenes/shop/shop");
     private PackedScene _treasureScene = SimpleLoader.LoadPackedScene("res://scenes/treasure_room/treasure_room");
 
     #region onready
-    
+
+    private Map _map;
     private Node _currentView;
     private GoldUI _goldUI;
     private CardPileOpener _deckButton;
     private CardPileView _deckView;
-    
+
     #endregion
-    
+
     private RunStats _runStats;
     private CharacterStats _characterStats;
 
     private Dictionary<string, Action> _btnNameToPressed;
-    
+
     [Export] public RunStartup RunStartup;
 
     public override void _Ready() {
         _logger = new FinchLogger(this);
-        
+
+        _map = GetNode<Map>("Map");
         _currentView = GetNode<Node>("CurrentView");
         _goldUI = GetNode<GoldUI>("%GoldUI");
         _deckButton = GetNode<CardPileOpener>("%DeckButton");
@@ -65,7 +66,9 @@ public partial class Run : Node {
         _runStats = new RunStats();
         SetupEventConnections();
         SetupTopBar();
-        _logger.Log("TODO: procedurally generate map");
+
+        _map.GenerateNewMap();
+        _map.UnlockFloor(0);
     }
 
     private Node ChangeView(PackedScene scene) {
@@ -76,7 +79,19 @@ public partial class Run : Node {
         GetTree().Paused = false;
         var newView = scene.Instantiate();
         _currentView.AddChild(newView);
+
+        _map.HideMap();
+
         return newView;
+    }
+
+    private void ShowMap() {
+        if (_currentView.GetChildCount() > 0) {
+            _currentView.GetChild(0).QueueFree();
+        }
+
+        _map.ShowMap();
+        _map.UnlockNextRooms();
     }
 
     private void SetupTopBar() {
@@ -88,14 +103,14 @@ public partial class Run : Node {
 
     private void SetupEventConnections() {
         EventDispatcher.RegEventListener(Battle.Event.BattleWon, OnBattleWon);
-        EventDispatcher.RegEventListener(BattleReward.Event.BattleRewardExited, OnBattleRewardExited);
-        EventDispatcher.RegEventListener(Campfire.Event.CampfireExited, OnCampfireExited);
-        EventDispatcher.RegEventListener(Map.Event.MapExited, OnMapExited);
-        EventDispatcher.RegEventListener(Shop.Event.ShopExited, OnShopExited);
-        EventDispatcher.RegEventListener(TreasureRoom.Event.TreasureRoomExited, OnTreasureRoomExited);
+        EventDispatcher.RegEventListener(BattleReward.Event.BattleRewardExited, ShowMap);
+        EventDispatcher.RegEventListener(Campfire.Event.CampfireExited, ShowMap);
+        EventDispatcher.RegEventListener<Room>(Map.Event.MapExited, OnMapExited);
+        EventDispatcher.RegEventListener(Shop.Event.ShopExited, ShowMap);
+        EventDispatcher.RegEventListener(TreasureRoom.Event.TreasureRoomExited, ShowMap);
 
         _btnNameToPressed = new Dictionary<string, Action> {
-            { "%MapButton", () => { ChangeView(_mapScene); } },
+            { "%MapButton", ShowMap },
             { "%BattleButton", () => { ChangeView(_battleScene); } },
             { "%ShopButton", () => { ChangeView(_shopScene); } },
             { "%TreasureButton", () => { ChangeView(_treasureScene); } },
@@ -109,40 +124,32 @@ public partial class Run : Node {
 
     private void UnRegAllEventListener() {
         EventDispatcher.UnRegEventListener(Battle.Event.BattleWon, OnBattleWon);
-        EventDispatcher.UnRegEventListener(BattleReward.Event.BattleRewardExited, OnBattleRewardExited);
-        EventDispatcher.UnRegEventListener(Campfire.Event.CampfireExited, OnCampfireExited);
-        EventDispatcher.UnRegEventListener(Map.Event.MapExited, OnMapExited);
-        EventDispatcher.UnRegEventListener(Shop.Event.ShopExited, OnShopExited);
-        EventDispatcher.UnRegEventListener(TreasureRoom.Event.TreasureRoomExited, OnTreasureRoomExited);
+        EventDispatcher.UnRegEventListener(BattleReward.Event.BattleRewardExited, ShowMap);
+        EventDispatcher.UnRegEventListener(Campfire.Event.CampfireExited, ShowMap);
+        EventDispatcher.UnRegEventListener<Room>(Map.Event.MapExited, OnMapExited);
+        EventDispatcher.UnRegEventListener(Shop.Event.ShopExited, ShowMap);
+        EventDispatcher.UnRegEventListener(TreasureRoom.Event.TreasureRoomExited, ShowMap);
     }
 
     private void OnBattleWon() {
         var rewardScene = (BattleReward)ChangeView(_battleRewardScene);
         rewardScene.RunStats = _runStats;
         rewardScene.CharacterStats = _characterStats;
-        
+
         // TODO: 临时测试代码
         rewardScene.AddGoldReward(77);
         rewardScene.AddCardReward();
     }
 
-    private void OnBattleRewardExited() {
-        ChangeView(_mapScene);
-    }
+    private void OnMapExited(Room room) {
+        Dictionary<Room.EType, PackedScene> typeToScene = new() {
+            { Room.EType.Monster, _battleScene },
+            { Room.EType.Treasure, _treasureScene },
+            { Room.EType.Campfire, _campfireScene },
+            { Room.EType.Shop, _shopScene },
+            { Room.EType.Boss, _battleScene },
+        };
 
-    private void OnCampfireExited() {
-        ChangeView(_mapScene);
-    }
-
-    private void OnMapExited() {
-        _logger.Log("TODO: from the MAP, change view based on room type");
-    }
-
-    private void OnShopExited() {
-        ChangeView(_mapScene);
-    }
-
-    private void OnTreasureRoomExited() {
-        ChangeView(_mapScene);
+        ChangeView(typeToScene[room.Type]);
     }
 }

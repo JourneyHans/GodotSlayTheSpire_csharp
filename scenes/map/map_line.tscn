@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dur2rechjm6eg"]
+
+[ext_resource type="Texture2D" uid="uid://e6utppbeeuul" path="res://art/line.png" id="1_fbpcs"]
+
+[node name="MapLine" type="Line2D"]
+texture_repeat = 2
+texture = ExtResource("1_fbpcs")
+texture_mode = 1

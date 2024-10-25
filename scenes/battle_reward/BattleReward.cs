@@ -36,6 +36,7 @@ public partial class BattleReward : Control {
         EventDispatcher.RegEventListener<Card>(global::CardRewards.Event.CardRewardSelected, OnCardRewardTaken);
         
         _backButton = GetNode<Button>("VBoxContainer/BackButton");
+        _backButton.Pressed += OnBackButtonPressed;
         _rewards = GetNode<VBoxContainer>("%Rewards");
         
         Reset();
@@ -148,6 +149,7 @@ public partial class BattleReward : Control {
     }
 
     private void OnBackButtonPressed() {
+        _logger.Log("OnBackButtonPressed");
         EventDispatcher.TriggerEvent(Event.BattleRewardExited);
     }
 }
