@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text;
 using framework.debug;
 using framework.events;
 using framework.extension;
@@ -111,7 +112,19 @@ public partial class BattleReward : Control {
     }
 
     private Card GetRandomAvailableCard(Array<Card> cards, Card.ERarity rarity) {
-        Array<Card> allPossibleCards = new Array<Card>(cards.Where(card => card.Rarity == rarity));
+        _logger.Log($"cards.Count: {cards.Count}, rarity: {rarity}");
+        Array<Card> allPossibleCards = cards.Filter(card => card.Rarity == rarity);
+        if (allPossibleCards.IsNullOrEmpty()) {
+            StringBuilder sb = new();
+            sb.AppendLine($"allPossibleCards is null or empty!, cards.Count: {cards.Count}, rarity: {rarity}");
+            foreach (Card card in cards) {
+                sb.AppendLine($"\tcard.Rarity: {card.Rarity}");
+            }
+
+            _logger.Error(sb.ToString());
+
+        }
+
         return allPossibleCards.PickRandom();
     }
 

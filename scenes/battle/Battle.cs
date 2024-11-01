@@ -2,7 +2,8 @@ using framework.events;
 using Godot;
 
 public partial class Battle : Node2D {
-    [Export] public CharacterStats CharacterStats { get; private set; }
+    [Export] public BattleStats BattleStats { get; set; }
+    [Export] public CharacterStats CharacterStats { get; set; }
     [Export] public AudioStream Music { get; private set; }
     
     private PlayerHandler _playerHandler;
@@ -16,19 +17,12 @@ public partial class Battle : Node2D {
         _battleUI = GetNode<BattleUI>("BattleUI");
         _player = GetNode<Player>("Player");
         
-        CharacterStats newStat = CharacterStats.CreateInstance();
-        _battleUI.CharacterStats = newStat;
-        _player.Stats = newStat;
-        
         EventDispatcher.RegEventListener(EnemyHandler.Event.EnemyTurnEnded, OnEnemyTurnEnded);
         EventDispatcher.RegEventListener(PlayerHandler.Event.PlayerTurnEnded, _playerHandler.EndTurn);
         EventDispatcher.RegEventListener(PlayerHandler.Event.PlayerHandDiscarded, _enemyHandler.StartTurn);
         
         EventDispatcher.RegEventListener(Player.Event.PlayerDied, OnPlayerDied);
         _enemyHandler.ChildOrderChanged += OnEnemiesChildOrderChanged;
-
-        StartBattle(newStat);
-        _battleUI.InitializedCardPileUI();
     }
 
     protected override void Dispose(bool disposing) {
@@ -38,11 +32,17 @@ public partial class Battle : Node2D {
         EventDispatcher.UnRegEventListener(Player.Event.PlayerDied, OnPlayerDied);
     }
 
-    private void StartBattle(CharacterStats stats) {
+    public void StartBattle() {
         GetTree().Paused = false;
         AudioPlayer.PlayMusic(Music, true);
-        _playerHandler.StartBattle(stats);
+        
+        _battleUI.CharacterStats = CharacterStats;
+        _player.Stats = CharacterStats;
+        _enemyHandler.SetupEnemies(BattleStats);
         _enemyHandler.ResetEnemyActions();
+        
+        _playerHandler.StartBattle(CharacterStats);
+        _battleUI.InitializedCardPileUI();
     }
 
     private void OnEnemyTurnEnded() {

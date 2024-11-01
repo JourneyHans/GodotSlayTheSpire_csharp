@@ -8,6 +8,7 @@
 script = ExtResource("2_6e3oc")
 Id = "warrior_block"
 Type = 1
+Rarity = 0
 Target = 0
 Cost = 1
 Icon = ExtResource("1_5ncjd")

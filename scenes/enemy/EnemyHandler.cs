@@ -29,6 +29,24 @@ public partial class EnemyHandler : Node2D {
         firstEnemy.DoTurn();
     }
 
+    public void SetupEnemies(BattleStats battleStats) {
+        if (battleStats == null) {
+            return;
+        }
+
+        foreach (Enemy enemy in GetChildren()) {
+            enemy.QueueFree();
+        }
+
+        Node2D allNewEnemies = battleStats.Enemies.Instantiate<Node2D>();
+        foreach (Node2D newEnemy in allNewEnemies.GetChildren()) {
+            var newEnemyChild = (Enemy)newEnemy.Duplicate();
+            AddChild(newEnemyChild);
+        }
+
+        allNewEnemies.QueueFree();
+    }
+
     private void OnEnemyActionCompleted(Enemy enemy) {
         int index = enemy.GetIndex();
         if (index == GetChildCount() - 1) {

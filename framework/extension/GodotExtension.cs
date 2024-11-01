@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Godot;
 using Godot.Collections;
 
@@ -54,6 +56,7 @@ public static class TweenExtension {
     public static PropertyTweener DoMove(this Tween tween, GodotObject target, Variant end, float duration) {
         return tween.TweenProperty(target, "global_position", end, duration);
     }
+    
 }
 
 public static class SceneTreeExtension {
@@ -67,3 +70,13 @@ public static class SceneTreeExtension {
         return nodes;
     }
 }
+
+#pragma warning disable GD0302
+
+public static class ArrayExtension {
+    public static Array<T> Filter<T>(this Array<T> array, Func<T, bool> predicate) {
+        return new Array<T>(array.Where(predicate));
+    }
+}
+
+#pragma warning restore GD0302

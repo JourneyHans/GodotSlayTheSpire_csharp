@@ -20,6 +20,9 @@ public partial class Room : Resource {
     [Export] public Vector2 Position { get; set; }
     [Export] public Array<Room> NextRooms { get; set; }
     [Export] public bool Selected { get; set; }
+    
+    /* This is only used by the Monster and Boss types */
+    [Export] public BattleStats BattleStats { get; set; }
 
     #endregion
 

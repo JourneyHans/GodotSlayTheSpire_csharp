@@ -24,7 +24,7 @@ public partial class Map : Node2D {
 
     private Array<Array<Room>> _mapData;
     private int _floorsClimbed;
-    private Room _lastRoom;
+    public Room LastRoom { get; private set; }
     private float _cameraEdgeY;
     
     public override void _Ready() {
@@ -79,7 +79,7 @@ public partial class Map : Node2D {
 
     public void UnlockNextRooms() {
         foreach (MapRoom mapRoom in _rooms.GetChildren()) {
-            if (_lastRoom.NextRooms.Contains(mapRoom.Room)) {
+            if (LastRoom.NextRooms.Contains(mapRoom.Room)) {
                 mapRoom.Available = true;
             }
         }
@@ -125,10 +125,10 @@ public partial class Map : Node2D {
             }
         }
 
-        _lastRoom = room;
+        LastRoom = room;
         _floorsClimbed++;
 
-        EventDispatcher.TriggerEvent(Event.MapExited, _lastRoom);
+        EventDispatcher.TriggerEvent(Event.MapExited, LastRoom);
     }
 
     public override void _Input(InputEvent @event) {

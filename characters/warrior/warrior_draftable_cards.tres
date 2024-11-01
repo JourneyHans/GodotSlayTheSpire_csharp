@@ -8,4 +8,4 @@
 
 [resource]
 script = ExtResource("1_88ra6")
-Cards = [ExtResource("2_4wq5k"), ExtResource("2_4wq5k"), ExtResource("3_b07ie"), ExtResource("4_7l7ey"), ExtResource("4_7l7ey"), ExtResource("4_7l7ey"), ExtResource("5_gg7oi"), ExtResource("5_gg7oi"), ExtResource("5_gg7oi")]
+Cards = [ExtResource("2_4wq5k"), ExtResource("2_4wq5k"), ExtResource("2_4wq5k"), ExtResource("3_b07ie"), ExtResource("3_b07ie"), ExtResource("3_b07ie"), ExtResource("4_7l7ey"), ExtResource("4_7l7ey"), ExtResource("4_7l7ey"), ExtResource("5_gg7oi"), ExtResource("5_gg7oi"), ExtResource("5_gg7oi")]

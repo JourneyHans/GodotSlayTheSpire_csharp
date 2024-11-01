@@ -131,25 +131,41 @@ public partial class Run : Node {
         EventDispatcher.UnRegEventListener(TreasureRoom.Event.TreasureRoomExited, ShowMap);
     }
 
+    private void OnBattleRoomEntered(Room room) {
+        var battleScene = (Battle)ChangeView(_battleScene);
+        battleScene.CharacterStats = _characterStats;
+        battleScene.BattleStats = room.BattleStats;
+        battleScene.StartBattle();
+    }
+
     private void OnBattleWon() {
         var rewardScene = (BattleReward)ChangeView(_battleRewardScene);
         rewardScene.RunStats = _runStats;
         rewardScene.CharacterStats = _characterStats;
 
-        // TODO: 临时测试代码
-        rewardScene.AddGoldReward(77);
+        rewardScene.AddGoldReward(_map.LastRoom.BattleStats.RollGoldReward());
         rewardScene.AddCardReward();
     }
 
     private void OnMapExited(Room room) {
-        Dictionary<Room.EType, PackedScene> typeToScene = new() {
-            { Room.EType.Monster, _battleScene },
-            { Room.EType.Treasure, _treasureScene },
-            { Room.EType.Campfire, _campfireScene },
-            { Room.EType.Shop, _shopScene },
-            { Room.EType.Boss, _battleScene },
-        };
-
-        ChangeView(typeToScene[room.Type]);
+        switch (room.Type) {
+            case Room.EType.Monster:
+                OnBattleRoomEntered(room);
+                break;
+            case Room.EType.Treasure:
+                ChangeView(_treasureScene);
+                break;
+            case Room.EType.Campfire:
+                ChangeView(_campfireScene);
+                break;
+            case Room.EType.Shop:
+                ChangeView(_shopScene);
+                break;
+            case Room.EType.Boss:
+                OnBattleRoomEntered(room);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }

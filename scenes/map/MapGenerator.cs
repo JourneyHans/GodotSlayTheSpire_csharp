@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Text;
 using framework.debug;
 using framework.extension;
 using Godot;
@@ -21,6 +20,8 @@ public partial class MapGenerator : Node {
     private const float MonsterRoomWeight = 10f;
     private const float ShopRoomWeight = 2.5f;
     private const float CampfireRoomWeight = 4.0f;
+
+    [Export] public BattleStatsPool BattleStatsPool;
 
     #endregion
 
@@ -54,6 +55,8 @@ public partial class MapGenerator : Node {
                 currentCol = SetupConnection(row, currentCol);
             }
         }
+
+        BattleStatsPool.Setup();
 
         SetupBossRoom();
         SetupRandomRoomWeights();
@@ -174,6 +177,7 @@ public partial class MapGenerator : Node {
             }
         }
         BossRoom.Type = Room.EType.Boss;
+        BossRoom.BattleStats = BattleStatsPool.GetRandomBattleForTier(2);
     }
 
     private void SetupRandomRoomWeights() {
@@ -198,6 +202,9 @@ public partial class MapGenerator : Node {
             foreach (Room room in _mapData[idx]) {
                 if (!room.NextRooms.IsNullOrEmpty()) {
                     room.Type = type;
+                    if (type == Room.EType.Monster) {
+                        room.BattleStats = BattleStatsPool.GetRandomBattleForTier(0);
+                    }
                 }
             }
         }
@@ -235,6 +242,11 @@ public partial class MapGenerator : Node {
         }
 
         room.Type = typeCandidate;
+
+        if (typeCandidate == Room.EType.Monster) {
+            int tierForMonsterRooms = room.Row > 2 ? 1 : 0;
+            room.BattleStats = BattleStatsPool.GetRandomBattleForTier(tierForMonsterRooms);
+        }
     }
 
     private bool RoomHasParentOfType(Room room, Room.EType type) {
