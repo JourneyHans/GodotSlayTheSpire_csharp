@@ -17,12 +17,13 @@ public partial class ManaUI : Panel {
     }
 
     protected override void Dispose(bool disposing) {
-        EventDispatcher.UnRegEventListener(Stats.Event.StatsChanged, OnStatsChanged);
+        _characterStats.OnStateChanged -= OnStatsChanged;
     }
 
     private void SetCharacterStats(CharacterStats stats) {
         _characterStats = stats;
-        EventDispatcher.SafeRegEventListener(Stats.Event.StatsChanged, OnStatsChanged);
+        _characterStats.OnStateChanged -= OnStatsChanged;
+        _characterStats.OnStateChanged += OnStatsChanged;
         
         OnStatsChanged();
     }

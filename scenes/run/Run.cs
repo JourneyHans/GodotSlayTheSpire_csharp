@@ -18,6 +18,7 @@ public partial class Run : Node {
 
     private Map _map;
     private Node _currentView;
+    private HealthUI _healthUI;
     private GoldUI _goldUI;
     private CardPileOpener _deckButton;
     private CardPileView _deckView;
@@ -36,6 +37,7 @@ public partial class Run : Node {
 
         _map = GetNode<Map>("Map");
         _currentView = GetNode<Node>("CurrentView");
+        _healthUI = GetNode<HealthUI>("%HealthUI");
         _goldUI = GetNode<GoldUI>("%GoldUI");
         _deckButton = GetNode<CardPileOpener>("%DeckButton");
         _deckView = GetNode<CardPileView>("%DeckView");
@@ -95,6 +97,8 @@ public partial class Run : Node {
     }
 
     private void SetupTopBar() {
+        _healthUI.UpdaeteStates(_characterStats);
+        _characterStats.OnStateChanged += OnCharacterStatsChanged;
         _goldUI.RunStats = _runStats;
         _deckButton.CardPile = _characterStats.Deck;
         _deckView.CardPile = _characterStats.Deck;
@@ -129,6 +133,11 @@ public partial class Run : Node {
         EventDispatcher.UnRegEventListener<Room>(Map.Event.MapExited, OnMapExited);
         EventDispatcher.UnRegEventListener(Shop.Event.ShopExited, ShowMap);
         EventDispatcher.UnRegEventListener(TreasureRoom.Event.TreasureRoomExited, ShowMap);
+        _characterStats.OnStateChanged -= OnCharacterStatsChanged;
+    }
+
+    private void OnCharacterStatsChanged() {
+        _healthUI.UpdaeteStates(_characterStats);
     }
 
     private void OnBattleRoomEntered(Room room) {
@@ -136,6 +145,11 @@ public partial class Run : Node {
         battleScene.CharacterStats = _characterStats;
         battleScene.BattleStats = room.BattleStats;
         battleScene.StartBattle();
+    }
+
+    private void OnCampFireEntered() {
+        var campfireScene = (Campfire)ChangeView(_campfireScene);
+        campfireScene.CharacterStats = _characterStats;
     }
 
     private void OnBattleWon() {
@@ -156,7 +170,7 @@ public partial class Run : Node {
                 ChangeView(_treasureScene);
                 break;
             case Room.EType.Campfire:
-                ChangeView(_campfireScene);
+                OnCampFireEntered();
                 break;
             case Room.EType.Shop:
                 ChangeView(_shopScene);

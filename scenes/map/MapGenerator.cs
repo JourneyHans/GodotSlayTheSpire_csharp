@@ -27,8 +27,8 @@ public partial class MapGenerator : Node {
 
     private Dictionary<Room.EType, float> _roomTypeToWeight = new() {
         { Room.EType.Monster, 0f },
-        { Room.EType.Shop, 0f },
         { Room.EType.Campfire, 0f },
+        { Room.EType.Shop, 0f },
     };
 
     private float _randomRomTypeTotalWeight;

@@ -14,8 +14,9 @@ public partial class Player : Node2D {
     public CharacterStats Stats {
         get => _stats;
         set {
-            EventDispatcher.SafeRegEventListener(global::Stats.Event.StatsChanged, OnUpdateStats);
             _stats = value;
+            _stats.OnStateChanged -= OnUpdateStats;
+            _stats.OnStateChanged += OnUpdateStats;
             UpdatePlayer();
         }
     }
@@ -28,7 +29,7 @@ public partial class Player : Node2D {
     }
 
     protected override void Dispose(bool disposing) {
-        EventDispatcher.UnRegEventListener(global::Stats.Event.StatsChanged, OnUpdateStats);
+        _stats.OnStateChanged -= OnUpdateStats;
     }
 
     private async void UpdatePlayer() {

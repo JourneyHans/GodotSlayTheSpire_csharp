@@ -1,3 +1,4 @@
+using System;
 using framework.events;
 using Godot;
 
@@ -5,6 +6,8 @@ using Godot;
 public partial class Stats : Resource {
     [Export] public int MaxHealth = 1;
     [Export] public Texture2D Art;
+
+    public event Action OnStateChanged;
 
     protected int health;
     protected int block;
@@ -62,12 +65,6 @@ public partial class Stats : Resource {
     }
 
     protected void OnStatsChanged() {
-        EventDispatcher.TriggerEvent(Event.StatsChanged);
-    }
-}
-
-public partial class Stats {
-    public static class Event {
-        public const string StatsChanged = "StatsChanged";
+        OnStateChanged?.Invoke();
     }
 }

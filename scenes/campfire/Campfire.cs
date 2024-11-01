@@ -3,16 +3,36 @@ using Godot;
 
 public partial class Campfire : Control
 {
-    private Button _button;
-    private Label _label;
+    #region export
+
+    [Export] public CharacterStats CharacterStats;
+
+    #endregion
+    
+    private Button _resetButton;
+    private AnimationPlayer _animationPlayer;
+    private bool _isExiting;
 
     public override void _Ready() {
-        _button = GetNode<Button>("VBoxContainer/Button");
-        _button.Pressed += OnButtonPressed;
-        _label = GetNode<Label>("VBoxContainer/Label");
+        _resetButton = GetNode<Button>("UILayer/UI/RestButton");
+        _resetButton.Pressed += OnResetButtonPressed;
+        
+        _animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
     }
 
-    private void OnButtonPressed() {
+    private void OnResetButtonPressed() {
+        if (_isExiting) {
+            return;
+        }
+
+        _isExiting = true;
+        CharacterStats.Heal(Mathf.CeilToInt(CharacterStats.MaxHealth * 0.3f));
+        _animationPlayer.Play("fade_out");
+    }
+    
+    // This is called from the AnimationPlayer
+    // at the end of 'fade-out'
+    private void OnFadeOutFinished() {
         EventDispatcher.TriggerEvent(Event.CampfireExited);
     }
 }

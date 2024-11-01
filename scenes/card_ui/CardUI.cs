@@ -23,7 +23,8 @@ public partial class CardUI : Control {
 		get => _characterStats;
 		set {
 			_characterStats = value;
-			EventDispatcher.SafeRegEventListener(Stats.Event.StatsChanged, OnCharacterStatsChanged);
+			_characterStats.OnStateChanged -= OnCharacterStatsChanged;
+			_characterStats.OnStateChanged += OnCharacterStatsChanged;
 		}
 	}
 
@@ -83,7 +84,7 @@ public partial class CardUI : Control {
 		EventDispatcher.UnRegEventListener<CardUI>(CardState.Event.CardDragStarted, OnCardDragOrAimStarted);
 		EventDispatcher.UnRegEventListener<CardUI>(CardState.Event.CardAimEnded, OnCardDragOrAimEnded);
 		EventDispatcher.UnRegEventListener<CardUI>(CardState.Event.CardDragEnded, OnCardDragOrAimEnded);
-		EventDispatcher.UnRegEventListener(Stats.Event.StatsChanged, OnCharacterStatsChanged);
+		_characterStats.OnStateChanged -= OnCharacterStatsChanged;
 	}
 
 	public override void _Input(InputEvent inputEvent) {

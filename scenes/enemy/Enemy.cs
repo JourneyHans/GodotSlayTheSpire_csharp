@@ -17,8 +17,9 @@ public partial class Enemy : Area2D {
     public EnemyStats Stats {
         get => _stats;
         private set {
-            EventDispatcher.SafeRegEventListener(global::Stats.Event.StatsChanged, OnUpdateStats);
             _stats = value.CreateInstance();
+            _stats.OnStateChanged -= OnUpdateStats;
+            _stats.OnStateChanged += OnUpdateStats;
             UpdateEnemy();
         }
     }
@@ -48,7 +49,7 @@ public partial class Enemy : Area2D {
     }
 
     protected override void Dispose(bool disposing) {
-        EventDispatcher.UnRegEventListener(global::Stats.Event.StatsChanged, OnUpdateStats);
+        _stats.OnStateChanged -= OnUpdateStats;
     }
 
     private void SetUpAI() {
