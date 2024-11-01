@@ -9,8 +9,8 @@ public partial class Map : Node2D {
     private FinchLogger _logger;
     
     private const float ScrollSpeed = 15f;
-    private static readonly PackedScene MapRoom = SimpleLoader.LoadPackedScene("res://scenes/map/map_room");
-    private static readonly PackedScene MapLine = SimpleLoader.LoadPackedScene("res://scenes/map/map_line");
+    private static readonly PackedScene MapRoomScene = SimpleLoader.LoadPackedScene("res://scenes/map/map_room");
+    private static readonly PackedScene MapLineScene = SimpleLoader.LoadPackedScene("res://scenes/map/map_line");
 
     #region onready
 
@@ -26,6 +26,7 @@ public partial class Map : Node2D {
     private int _floorsClimbed;
     public Room LastRoom { get; private set; }
     private float _cameraEdgeY;
+    private bool _enableScroll;
     
     public override void _Ready() {
         _logger = new FinchLogger(this);
@@ -37,12 +38,15 @@ public partial class Map : Node2D {
         _camera = GetNode<Camera2D>("Camera2D");
 
         _cameraEdgeY = MapGenerator.YDist * (MapGenerator.Floors - 1);
+        SetMapScrollEnabled(true);
         
-        EventDispatcher.RegEventListener<Room>(global::MapRoom.Event.Selected, OnMapRoomSelected);
+        EventDispatcher.RegEventListener<bool>(Event.SetMapScrollEnabled, SetMapScrollEnabled);
+        EventDispatcher.RegEventListener<Room>(MapRoom.Event.Selected, OnMapRoomSelected);
     }
 
     protected override void Dispose(bool disposing) {
-        EventDispatcher.UnRegEventListener<Room>(global::MapRoom.Event.Selected, OnMapRoomSelected);
+        EventDispatcher.UnRegEventListener<bool>(Event.SetMapScrollEnabled, SetMapScrollEnabled);
+        EventDispatcher.UnRegEventListener<Room>(MapRoom.Event.Selected, OnMapRoomSelected);
     }
 
     public void GenerateNewMap() {
@@ -88,6 +92,7 @@ public partial class Map : Node2D {
     public void ShowMap() {
         Show();
         _camera.Enabled = true;
+        SetMapScrollEnabled(true);
     }
 
     public void HideMap() {
@@ -96,7 +101,7 @@ public partial class Map : Node2D {
     }
 
     private void SpawnMap(Room room) {
-        MapRoom mapRoom = MapRoom.Instantiate<MapRoom>();
+        MapRoom mapRoom = MapRoomScene.Instantiate<MapRoom>();
         _rooms.AddChild(mapRoom);
         mapRoom.Room = room;
         ConnectLines(room);
@@ -111,11 +116,15 @@ public partial class Map : Node2D {
         }
 
         foreach (Room nextRoom in room.NextRooms) {
-            Line2D mapLine = MapLine.Instantiate<Line2D>();
+            Line2D mapLine = MapLineScene.Instantiate<Line2D>();
             mapLine.AddPoint(room.Position);
             mapLine.AddPoint(nextRoom.Position);
             _lines.AddChild(mapLine);
         }
+    }
+
+    private void SetMapScrollEnabled(bool enable) {
+        _enableScroll = enable;
     }
 
     private void OnMapRoomSelected(Room room) {
@@ -132,6 +141,14 @@ public partial class Map : Node2D {
     }
 
     public override void _Input(InputEvent @event) {
+        if (!_enableScroll) {
+            return;
+        }
+
+        if (!Visible) {
+            return;
+        }
+
         if (!@event.IsAction(InputKey.ScrollUp) && !@event.IsAction(InputKey.ScrollDown)) {
             return;
         }
@@ -151,6 +168,15 @@ public partial class Map : Node2D {
 
 public partial class Map {
     public static class Event {
+        /// <summary>
+        /// 地图退出事件
+        /// </summary>
         public const string MapExited = "MapExited";
+        
+        /// <summary>
+        /// 设置地图是否可以滚动
+        /// 参数1：bool
+        /// </summary>
+        public const string SetMapScrollEnabled = "MapRoom.SetMapScrollEnabled";
     }
 }

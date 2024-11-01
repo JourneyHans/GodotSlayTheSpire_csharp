@@ -54,6 +54,11 @@ public partial class PlayerHandler : Node {
     }
 
     private void DiscardCards() {
+        if (Hand.GetChildren().IsNullOrEmpty()) {
+            EventDispatcher.TriggerEvent(Event.PlayerHandDiscarded);
+            return;
+        }
+
         Tween tween = CreateTween();
         foreach (Node child in Hand.GetChildren()) {
             var cardUI = (CardUI)child;

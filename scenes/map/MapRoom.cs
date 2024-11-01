@@ -81,6 +81,9 @@ public partial class MapRoom : Area2D {
 
         _room.Selected = true;
         _animationPlayer.Play("select");
+        
+        // 点击房间的那一刻就禁用地图滚动
+        EventDispatcher.TriggerEvent(Map.Event.SetMapScrollEnabled, false);
     }
 
     // Called by the AnimationPlayer when the
