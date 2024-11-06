@@ -1,3 +1,4 @@
+using System;
 using framework.events;
 using framework.extension;
 using Godot;
@@ -5,7 +6,8 @@ using Godot;
 public partial class PlayerHandler : Node {
     private const float HandDrawInterval = 0.25f;
     private const float HandDiscardInterval = 0.25f;
-
+    
+    [Export] public Player Player { get; private set; }
     [Export] public Hand Hand { get; private set; }
 
     public CharacterStats CharacterStats { get; private set; }
@@ -23,24 +25,19 @@ public partial class PlayerHandler : Node {
         CharacterStats.DrawPile = characterStats.Deck.Duplicate<CardPile>(true);
         CharacterStats.DrawPile.Shuffle();
         CharacterStats.Discard = new CardPile();
+        Player.StatusHandler.StatusesApplied += OnStatusesApplied;
         StartTurn();
     }
 
     public void StartTurn() {
         CharacterStats.Block = 0;
         CharacterStats.ResetMana();
-        DrawCards(CharacterStats.CardsPerTurn);
+        Player.StatusHandler.ApplyStatusesByType(Status.EType.StartOfTurn);
     }
 
     public void EndTurn() {
         Hand.DisableHand();
-        DiscardCards();
-    }
-
-    private void DrawCard() {
-        ReshuffleDeckFromDiscard();
-        Hand.AddCard(CharacterStats.DrawPile.DrawCard());
-        ReshuffleDeckFromDiscard();
+        Player.StatusHandler.ApplyStatusesByType(Status.EType.EndOfTurn);
     }
 
     private void DrawCards(int amount) {
@@ -51,6 +48,24 @@ public partial class PlayerHandler : Node {
         }
 
         tween.Finished += () => { EventDispatcher.TriggerEvent(Event.PlayerHandDrawn); };
+    }
+
+    private void DrawCard() {
+        ReshuffleDeckFromDiscard();
+        Hand.AddCard(CharacterStats.DrawPile.DrawCard());
+        ReshuffleDeckFromDiscard();
+    }
+
+    private void ReshuffleDeckFromDiscard() {
+        if (!CharacterStats.DrawPile.IsEmpty) {
+            return;
+        }
+
+        while (!CharacterStats.Discard.IsEmpty) {
+            CharacterStats.DrawPile.AddCard(CharacterStats.Discard.DrawCard());
+        }
+
+        CharacterStats.DrawPile.Shuffle();
     }
 
     private void DiscardCards() {
@@ -72,20 +87,24 @@ public partial class PlayerHandler : Node {
         };
     }
 
-    private void ReshuffleDeckFromDiscard() {
-        if (!CharacterStats.DrawPile.IsEmpty) {
+    private void OnCardPlayed(Card card) {
+        if (card.Exhausts || card.Type == Card.EType.Power) {
+            // 消耗卡
             return;
         }
 
-        while (!CharacterStats.Discard.IsEmpty) {
-            CharacterStats.DrawPile.AddCard(CharacterStats.Discard.DrawCard());
-        }
-
-        CharacterStats.DrawPile.Shuffle();
+        CharacterStats.Discard.AddCard(card);
     }
 
-    private void OnCardPlayed(Card card) {
-        CharacterStats.Discard.AddCard(card);
+    private void OnStatusesApplied(Status.EType type) {
+        switch (type) {
+            case Status.EType.StartOfTurn:
+                DrawCards(CharacterStats.CardsPerTurn);
+                break;
+            case Status.EType.EndOfTurn:
+                DiscardCards();
+                break;
+        }
     }
 }
 

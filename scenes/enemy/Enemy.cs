@@ -12,6 +12,7 @@ public partial class Enemy : Area2D {
     private Sprite2D _arrow;
     private StatsUI _statsUI;
     private IntentUI _intentUI;
+    public StatusHandler StatusHandler { get; private set; }
 
     [Export]
     public EnemyStats Stats {
@@ -43,6 +44,7 @@ public partial class Enemy : Area2D {
         _arrow = GetNode<Sprite2D>("Arrow");
         _statsUI = GetNode<StatsUI>("StatsUI");
         _intentUI = GetNode<IntentUI>("IntentUI");
+        StatusHandler = GetNode<StatusHandler>("StatusHandler");
 
         AreaEntered += OnAreaEntered;
         AreaExited += OnAreaExited;
@@ -88,7 +90,9 @@ public partial class Enemy : Area2D {
         tween.TweenInterval(0.17);
         tween.Finished += () => {
             _sprite.Material = null;
+            
             if (Stats.Health <= 0) {
+                EventDispatcher.TriggerEvent(Event.EnemyDied, this);
                 QueueFree();
             }
         };

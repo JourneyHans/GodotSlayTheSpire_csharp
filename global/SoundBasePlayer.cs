@@ -10,7 +10,7 @@ public abstract partial class SoundBasePlayer : Node {
 
     public void Play(AudioStream audio, bool single = false) {
         if (audio == null) {
-            _logger.Error("audio为空");
+            // _logger.Error("audio为空");
             return;
         }
 

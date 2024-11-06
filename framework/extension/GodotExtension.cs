@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
 
 namespace framework.extension;
+
+#region GodotObjectExtension
 
 public static class GodotObjectExtension {
     public static string Info(this GodotObject target) {
@@ -46,18 +49,39 @@ public static class GodotObjectExtension {
     }
 }
 
+#endregion
+
+#region NodeExtension
+
+public static class NodeExtension {
+    public static IEnumerable<T> GetChildren<T>(this Node node, bool includeInternal = false) {
+        return node.GetChildren(includeInternal).Cast<T>();
+    }
+}
+
+#endregion
+
+#region ResourceExtension
+
 public static class ResourceExtension {
     public static T Duplicate<T>(this Resource resource, bool subresource = false) where T : Resource {
         return (T)resource.Duplicate(subresource);
     }
 }
 
+#endregion
+
+#region TweenExtion
+
 public static class TweenExtension {
     public static PropertyTweener DoMove(this Tween tween, GodotObject target, Variant end, float duration) {
         return tween.TweenProperty(target, "global_position", end, duration);
     }
-    
 }
+
+#endregion
+
+#region SceneTreeExtension
 
 public static class SceneTreeExtension {
     public static Array<Node2D> Get2DNodesInGroup(this SceneTree tree, StringName group) {
@@ -71,6 +95,10 @@ public static class SceneTreeExtension {
     }
 }
 
+#endregion
+
+#region ArrayExtension
+
 #pragma warning disable GD0302
 
 public static class ArrayExtension {
@@ -80,3 +108,5 @@ public static class ArrayExtension {
 }
 
 #pragma warning restore GD0302
+
+#endregion

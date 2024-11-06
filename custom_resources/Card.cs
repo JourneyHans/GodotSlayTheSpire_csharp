@@ -36,6 +36,7 @@ public partial class Card : Resource {
     [Export] public ERarity Rarity { get; private set; }
     [Export] public ETarget Target { get; private set; }
     [Export] public int Cost { get; private set; }
+    [Export] public bool Exhausts { get; private set; }
 
     [ExportGroup("Card Visuals")] [Export] public Texture2D Icon { get; private set; }
     [Export(PropertyHint.MultilineText)] public string ToolTipTxt { get; private set; }

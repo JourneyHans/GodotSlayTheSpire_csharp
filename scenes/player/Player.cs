@@ -6,10 +6,16 @@ using Godot;
 
 public partial class Player : Node2D {
     private Material _whiteSpriteMatRes;
-    private CharacterStats _stats;
+
+    #region onready
+    
     private Sprite2D _sprite;
     private StatsUI _statsUI;
+    public StatusHandler StatusHandler;
+    
+    #endregion
 
+    private CharacterStats _stats;
     [Export]
     public CharacterStats Stats {
         get => _stats;
@@ -26,6 +32,7 @@ public partial class Player : Node2D {
         
         _sprite = GetNode<Sprite2D>("Sprite2D");
         _statsUI = GetNode<StatsUI>("StatsUI");
+        StatusHandler = GetNode<StatusHandler>("StatusHandler");
     }
 
     protected override void Dispose(bool disposing) {
