@@ -8,9 +8,10 @@ using Godot.Collections;
 public partial class CardUI : Control {
 	public const string ReparentRequested = "ReparentRequested";
 	
-	private Card _card;
 	public int OriginalIndex;
 
+	[Export] public ModifierHandler ModifierHandler;
+	private Card _card;
 	[Export]
 	public Card Card {
 		get => _card;
@@ -111,7 +112,7 @@ public partial class CardUI : Control {
 			return;
 		}
 
-		Card.Play(Targets, CharacterStats);
+		Card.Play(Targets, CharacterStats, ModifierHandler);
 		QueueFree();
 	}
 

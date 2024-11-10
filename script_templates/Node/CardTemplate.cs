@@ -5,7 +5,7 @@ using Godot;
 using Godot.Collections;
 
 public partial class _CLASS_Card : Card {
-    protected override void ApplyEffect(Array<Node2D> targets) {
+    protected override void ApplyEffect(Array<Node2D> targets, ModifierHandler modifierHandler) {
         throw new System.NotImplementedException();
     }
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cpu7vi7jq4pmm"]
+[gd_scene load_steps=10 format=3 uid="uid://cpu7vi7jq4pmm"]
 
 [ext_resource type="Script" path="res://scenes/enemy/Enemy.cs" id="1_fkhis"]
 [ext_resource type="Texture2D" uid="uid://1u3b3hwqd8yh" path="res://art/tile_0110.png" id="1_n3kv3"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://cwvl0vvse4hgr" path="res://scenes/ui/stats_ui.tscn" id="3_l82rv"]
 [ext_resource type="PackedScene" uid="uid://buj3fjfro801q" path="res://scenes/ui/intent_ui.tscn" id="5_lhfwe"]
 [ext_resource type="PackedScene" uid="uid://bhfym3j6ist6h" path="res://scenes/status_handler/status_handler.tscn" id="6_6fkus"]
+[ext_resource type="PackedScene" uid="uid://5y7b3bxmgnaq" path="res://scenes/modifier_handler/modifier_handler.tscn" id="7_6hsjp"]
+[ext_resource type="PackedScene" uid="uid://h5iox3lw5p1q" path="res://scenes/modifier_handler/modifier.tscn" id="8_dqjr7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o02si"]
 
@@ -39,3 +41,10 @@ offset_top = 25.0
 offset_right = -25.0
 offset_bottom = 25.0
 StatusOwner = NodePath("..")
+
+[node name="ModifierHandler" parent="." instance=ExtResource("7_6hsjp")]
+
+[node name="DamageDealtModifier" parent="ModifierHandler" instance=ExtResource("8_dqjr7")]
+
+[node name="DamageTakenModifier" parent="ModifierHandler" instance=ExtResource("8_dqjr7")]
+Type = 1

@@ -2,9 +2,11 @@ using Godot;
 using Godot.Collections;
 
 public partial class WarriorSlash : Card {
-	protected override void ApplyEffect(Array<Node2D> targets) {
+	private int _baseDamage = 4;
+
+	protected override void ApplyEffect(Array<Node2D> targets, ModifierHandler modifierHandler) {
 		DamageEffect damageEffect = new();
-		damageEffect.Amount = 4;
+		damageEffect.Amount = modifierHandler.GetModifierValue(_baseDamage, Modifier.EType.DmgDealt);
 		damageEffect.Sound = Sound;
 		damageEffect.Execute(targets);
 	}

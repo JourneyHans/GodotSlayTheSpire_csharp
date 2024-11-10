@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://5y7b3bxmgnaq"]
+
+[ext_resource type="Script" path="res://scenes/modifier_handler/ModifierHandler.cs" id="1_hi4iq"]
+
+[node name="ModifierHandler" type="Node"]
+script = ExtResource("1_hi4iq")

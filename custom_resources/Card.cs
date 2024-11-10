@@ -58,14 +58,14 @@ public partial class Card : Resource {
         };
     }
 
-    public void Play(Array<Node2D> targets, CharacterStats characterStats) {
+    public void Play(Array<Node2D> targets, CharacterStats characterStats, ModifierHandler modifierHandler) {
         EventDispatcher.TriggerEvent(Event.CardPlayed, this);
         characterStats.Mana -= Cost;
 
-        ApplyEffect(IsSingleTarget ? targets : GetTargets(targets));
+        ApplyEffect(IsSingleTarget ? targets : GetTargets(targets), modifierHandler);
     }
 
-    protected virtual void ApplyEffect(Array<Node2D> targets) {
+    protected virtual void ApplyEffect(Array<Node2D> targets, ModifierHandler modifierHandler) {
         
     }
 }

@@ -12,6 +12,7 @@ public partial class Player : Node2D {
     private Sprite2D _sprite;
     private StatsUI _statsUI;
     public StatusHandler StatusHandler;
+    public ModifierHandler ModifierHandler;
     
     #endregion
 
@@ -33,6 +34,7 @@ public partial class Player : Node2D {
         _sprite = GetNode<Sprite2D>("Sprite2D");
         _statsUI = GetNode<StatsUI>("StatsUI");
         StatusHandler = GetNode<StatusHandler>("StatusHandler");
+        ModifierHandler = GetNode<ModifierHandler>("ModifierHandler");
     }
 
     protected override void Dispose(bool disposing) {
@@ -48,16 +50,17 @@ public partial class Player : Node2D {
         OnUpdateStats();
     }
 
-    public void TakeDamage(int damage) {
+    public void TakeDamage(int damage, Modifier.EType type) {
         if (Stats.Health <= 0) {
             return;
         }
         
         _sprite.Material = _whiteSpriteMatRes;
+        int modifiedDamage = ModifierHandler.GetModifierValue(damage, type);
 
         Tween tween = CreateTween();
         tween.TweenCallback(Callable.From(() => { this.Shake(16, 0.15f); }));
-        tween.TweenCallback(Callable.From(() => { Stats.TakeDamage(damage); }));
+        tween.TweenCallback(Callable.From(() => { Stats.TakeDamage(modifiedDamage); }));
         tween.TweenInterval(0.17);
         tween.Finished += () => {
             _sprite.Material = null;

@@ -9,9 +9,9 @@ public partial class WarriorBigSlam : Card {
 	private int _baseDamage = 4;
 	private int _exposedDuration = 2;
 	
-	protected override void ApplyEffect(Array<Node2D> targets) {
+	protected override void ApplyEffect(Array<Node2D> targets, ModifierHandler modifierHandler) {
 		DamageEffect damageEffect = new();
-		damageEffect.Amount = _baseDamage;
+		damageEffect.Amount = modifierHandler.GetModifierValue(_baseDamage, Modifier.EType.DmgDealt);
 		damageEffect.Sound = Sound;
 		damageEffect.Execute(targets);
 		

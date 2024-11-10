@@ -11,6 +11,7 @@ Type = 0
 Rarity = 0
 Target = 1
 Cost = 1
+Exhausts = false
 Icon = ExtResource("1_622di")
 ToolTipTxt = "[center]Deal [color=\"ff0000\"]6[/color] damage.[/center]"
 Sound = ExtResource("2_al2t5")

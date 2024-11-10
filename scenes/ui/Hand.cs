@@ -3,9 +3,10 @@ using framework.utils;
 using Godot;
 
 public partial class Hand : HBoxContainer {
-	[Export] public CharacterStats CharacterStats { get; set; }
+	private static readonly PackedScene CardUIScene = SimpleLoader.LoadPackedScene("res://scenes/card_ui/card_ui");
 
-	private PackedScene _cardUIScene = SimpleLoader.LoadPackedScene("res://scenes/card_ui/card_ui");
+	[Export] public Player Player;
+	[Export] public CharacterStats CharacterStats { get; set; }
 
 	public override void _Ready() {
 		EventDispatcher.RegEventListener<CardUI>(CardUI.ReparentRequested, OnReparentRequested);
@@ -16,11 +17,12 @@ public partial class Hand : HBoxContainer {
 	}
 
 	public void AddCard(Card card) {
-		CardUI cardUI = _cardUIScene.Instantiate<CardUI>();
+		CardUI cardUI = CardUIScene.Instantiate<CardUI>();
 		AddChild(cardUI);
 		cardUI.Card = card;
 		cardUI.Parent = this;
 		cardUI.CharacterStats = CharacterStats;
+		cardUI.ModifierHandler = Player.ModifierHandler;
 	}
 
 	private void OnReparentRequested(CardUI cardUI) {

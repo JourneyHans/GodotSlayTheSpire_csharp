@@ -17,4 +17,8 @@ public partial class GDLogHandler : Node, ILogHandler {
     public void Error(string log) {
         GD.PushError(log);
     }
+
+    public void Assert(bool condition, string log) {
+        System.Diagnostics.Debug.Assert(condition, log);
+    }
 }

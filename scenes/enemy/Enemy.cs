@@ -7,13 +7,18 @@ public partial class Enemy : Area2D {
     private const int ArrowOffset = 5;
     private Material _whiteSpriteMatRes;
 
-    private EnemyStats _stats;
+    #region onready
+    
     private Sprite2D _sprite;
     private Sprite2D _arrow;
     private StatsUI _statsUI;
     private IntentUI _intentUI;
     public StatusHandler StatusHandler { get; private set; }
+    public ModifierHandler ModifierHandler { get; private set; }
 
+    #endregion
+
+    private EnemyStats _stats;
     [Export]
     public EnemyStats Stats {
         get => _stats;
@@ -45,6 +50,7 @@ public partial class Enemy : Area2D {
         _statsUI = GetNode<StatsUI>("StatsUI");
         _intentUI = GetNode<IntentUI>("IntentUI");
         StatusHandler = GetNode<StatusHandler>("StatusHandler");
+        ModifierHandler = GetNode<ModifierHandler>("ModifierHandler");
 
         AreaEntered += OnAreaEntered;
         AreaExited += OnAreaExited;
@@ -77,16 +83,17 @@ public partial class Enemy : Area2D {
         _currentAction.PerformAction();
     }
 
-    public void TakeDamage(int damage) {
+    public void TakeDamage(int damage, Modifier.EType type) {
         if (Stats.Health <= 0) {
             return;
         }
         
         _sprite.Material = _whiteSpriteMatRes;
+        int modifiedDamage = ModifierHandler.GetModifierValue(damage, type);
 
         Tween tween = CreateTween();
         tween.TweenCallback(Callable.From(() => { this.Shake(16, 0.15f); }));
-        tween.TweenCallback(Callable.From(() => { Stats.TakeDamage(damage); }));
+        tween.TweenCallback(Callable.From(() => { Stats.TakeDamage(modifiedDamage); }));
         tween.TweenInterval(0.17);
         tween.Finished += () => {
             _sprite.Material = null;

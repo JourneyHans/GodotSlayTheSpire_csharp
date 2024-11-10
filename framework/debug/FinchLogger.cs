@@ -1,10 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 namespace framework.debug;
 
 public class FinchLogger {
     public static ILogHandler LogHandler;
-    
+    public static bool Enabled = true;
+
     private readonly string _tag;
-    private readonly bool _enabled;
 
     private static string StackTrace => System.Environment.StackTrace;
 
@@ -13,11 +14,11 @@ public class FinchLogger {
 
     public FinchLogger(string tag, bool enabled = true) {
         _tag = tag;
-        _enabled = enabled;
+        Enabled = enabled;
     }
 
     public void Log(string log, bool stackTrace = false) {
-        if (!_enabled) {
+        if (!Enabled) {
             return;
         }
 
@@ -25,7 +26,7 @@ public class FinchLogger {
     }
 
     public void Warning(string log, bool stackTrace = false) {
-        if (!_enabled) {
+        if (!Enabled) {
             return;
         }
 
@@ -33,10 +34,18 @@ public class FinchLogger {
     }
 
     public void Error(string log, bool stackTrace = true) {
-        if (!_enabled) {
+        if (!Enabled) {
             return;
         }
 
         LogHandler?.Error(stackTrace ? $"[{_tag}] {log}\n{StackTrace}" : $"[{_tag}] {log}");
+    }
+
+    public void Assert([DoesNotReturnIf(false)] bool condition, string log, bool stackTrace = false) {
+        if (!Enabled) {
+            return;
+        }
+
+        LogHandler?.Assert(condition, stackTrace ? $"[{_tag}] {log}\n{StackTrace}" : $"{log}");
     }
 }
