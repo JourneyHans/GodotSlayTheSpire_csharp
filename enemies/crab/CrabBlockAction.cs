@@ -12,4 +12,8 @@ public partial class CrabBlockAction : EnemyAction {
 
         GetTree().CreateTimer(0.6f, false).Timeout += EnemyActionCompleted;
     }
+
+    public override void UpdateIntentText() {
+        Intent.UpdateCurrentText(Block);
+    }
 }

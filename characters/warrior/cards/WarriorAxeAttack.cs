@@ -10,4 +10,17 @@ public partial class WarriorAxeAttack : Card {
         damageEffect.Sound = Sound;
         damageEffect.Execute(targets);
     }
+
+    public override string GetDefaultTooltip() {
+        return string.Format(ToolTipTxt, _baseDamage);
+    }
+
+    public override string GetUpdatedTooltip(ModifierHandler playerModifiers, ModifierHandler enemyModifiers) {
+        var modifiedDmg = playerModifiers.GetModifierValue(_baseDamage, Modifier.EType.DmgDealt);
+        if (enemyModifiers != null) {
+            modifiedDmg = enemyModifiers.GetModifierValue(modifiedDmg, Modifier.EType.DmgTaken);
+        }
+
+        return string.Format(ToolTipTxt, modifiedDmg);
+    }
 }

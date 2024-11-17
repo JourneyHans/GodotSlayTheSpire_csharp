@@ -23,4 +23,8 @@ public partial class Muscle : Status {
 		modifierValue.FlatValue = Stacks;
 		dmgDealtModifier.AddNewValue(modifierValue);
 	}
+
+	public override string GetToolTip() {
+		return string.Format(ToolTip, Stacks);
+	}
 }

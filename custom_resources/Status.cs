@@ -45,10 +45,11 @@ public partial class Status : Resource {
     }
 
     [ExportGroup("Status Visuals")]
-    [Export] public Texture2D Icon;
+    [Export]
+    public Texture2D Icon;
 
     [Export(PropertyHint.MultilineText)] 
-    public string ToolTip { get; private set; }
+    public string ToolTip;
 
     public virtual void InitializeStatus(Node2D target) {
         
@@ -56,5 +57,9 @@ public partial class Status : Resource {
 
     public virtual void ApplyStatus(Node2D target) {
         StatusApplied?.Invoke(this);
+    }
+
+    public virtual string GetToolTip() {
+        return ToolTip;
     }
 }

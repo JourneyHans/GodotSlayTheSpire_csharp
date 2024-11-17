@@ -116,6 +116,20 @@ public partial class CardUI : Control {
 		QueueFree();
 	}
 
+	private ModifierHandler GetActiveEnemyModifiers() {
+		if (Targets.IsNullOrEmpty() || Targets.Count > 1 || Targets[0] is not Enemy enemy) {
+			return null;
+		}
+
+		return enemy.ModifierHandler;
+	}
+
+	public void RequestTooltip() {
+		ModifierHandler enemyModifiers = GetActiveEnemyModifiers();
+		string updatedTooltip = _card.GetUpdatedTooltip(ModifierHandler, enemyModifiers);
+		EventDispatcher.TriggerEvent(Tooltip.Event.ShowTips, _card.Icon, updatedTooltip);
+	}
+
 	#region Signal: CardUI
 
 	private void OnGUIInput(InputEvent inputEvent) {

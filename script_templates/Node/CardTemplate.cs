@@ -8,4 +8,12 @@ public partial class _CLASS_Card : Card {
     protected override void ApplyEffect(Array<Node2D> targets, ModifierHandler modifierHandler) {
         throw new System.NotImplementedException();
     }
+
+    public override string GetDefaultTooltip() {
+        return ToolTipTxt;
+    }
+
+    public override string GetUpdatedTooltip(ModifierHandler playerModifiers, ModifierHandler enemyModifiers) {
+        return ToolTipTxt;
+    }
 }

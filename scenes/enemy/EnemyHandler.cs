@@ -10,11 +10,13 @@ public partial class EnemyHandler : Node2D {
     public override void _Ready() {
         EventDispatcher.RegEventListener<Enemy>(Enemy.Event.EnemyDied, OnEnemyDied);
         EventDispatcher.RegEventListener<Enemy>(EnemyAction.Event.EnemyActionCompleted, OnEnemyActionCompleted);
+        EventDispatcher.RegEventListener(PlayerHandler.Event.PlayerHandDrawn, OnPlayerHandDrawn);
     }
 
     protected override void Dispose(bool disposing) {
         EventDispatcher.UnRegEventListener<Enemy>(Enemy.Event.EnemyDied, OnEnemyDied);
         EventDispatcher.UnRegEventListener<Enemy>(EnemyAction.Event.EnemyActionCompleted, OnEnemyActionCompleted);
+        EventDispatcher.UnRegEventListener(PlayerHandler.Event.PlayerHandDrawn, OnPlayerHandDrawn);
     }
 
     public void SetupEnemies(BattleStats battleStats) {
@@ -82,6 +84,12 @@ public partial class EnemyHandler : Node2D {
     }
 
     #endregion
+
+    private void OnPlayerHandDrawn() {
+        foreach (Enemy enemy in GetChildren()) {
+            enemy.UpdateIntent();
+        }
+    }
 
     private void OnEnemyDied(Enemy enemy) {
         bool isEnemyTurn = !_actingEnemies.IsNullOrEmpty();

@@ -12,4 +12,4 @@ CanExpire = false
 Duration = 0
 Stacks = 2
 Icon = ExtResource("1_barud")
-ToolTip = "muscle TODO"
+ToolTip = "Muscle: attacks deal {0} more damage."

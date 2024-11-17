@@ -35,6 +35,11 @@ public partial class Player : Node2D {
         _statsUI = GetNode<StatsUI>("StatsUI");
         StatusHandler = GetNode<StatusHandler>("StatusHandler");
         ModifierHandler = GetNode<ModifierHandler>("ModifierHandler");
+        
+        // test
+        var exposed = SimpleLoader.LoadResource<Exposed>("res://statuses/exposed");
+        exposed.Duration = 3;
+        StatusHandler.AddStatus(exposed);
     }
 
     protected override void Dispose(bool disposing) {

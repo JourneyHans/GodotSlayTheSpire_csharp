@@ -34,12 +34,7 @@ public partial class Enemy : Area2D {
     private EnemyAction _currentAction;
     public EnemyAction CurrentAction {
         get => _currentAction;
-        set {
-            _currentAction = value;
-            if (_currentAction != null) {
-                _intentUI.UpdateIntent(_currentAction.Intent);
-            }
-        }
+        set => SetCurrentAction(value);
     }
 
     public override void _Ready() {
@@ -60,11 +55,9 @@ public partial class Enemy : Area2D {
         _stats.OnStateChanged -= OnUpdateStats;
     }
 
-    private void SetUpAI() {
-        _enemyActionPicker?.QueueFree();
-        _enemyActionPicker = Stats.AI.Instantiate<EnemyActionPicker>();
-        AddChild(_enemyActionPicker);
-        _enemyActionPicker.Enemy = this;
+    private void SetCurrentAction(EnemyAction value) {
+        _currentAction = value;
+        UpdateIntent();
     }
 
     private async void UpdateEnemy() {
@@ -76,6 +69,22 @@ public partial class Enemy : Area2D {
         _arrow.Position = Vector2.Right * (_sprite.GetRect().Size.X / 2 + ArrowOffset);
         SetUpAI();
         OnUpdateStats();
+    }
+
+    public void UpdateIntent() {
+        if (_currentAction == null) {
+            return;
+        }
+
+        _currentAction.UpdateIntentText();
+        _intentUI.UpdateIntent(_currentAction.Intent);
+    }
+
+    private void SetUpAI() {
+        _enemyActionPicker?.QueueFree();
+        _enemyActionPicker = Stats.AI.Instantiate<EnemyActionPicker>();
+        AddChild(_enemyActionPicker);
+        _enemyActionPicker.Enemy = this;
     }
 
     public void DoTurn() {

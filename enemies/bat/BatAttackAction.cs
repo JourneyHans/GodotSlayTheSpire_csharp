@@ -23,4 +23,17 @@ public partial class BatAttackAction : EnemyAction {
 		tween.DoMove(Enemy, start, 0.4f);
 		tween.Finished += EnemyActionCompleted;
 	}
+
+	public override async void UpdateIntentText() {
+		if (Target is not Player player) {
+			return;
+		}
+
+		if (!player.IsNodeReady()) {
+			await player.WhenReady();
+		}
+
+		int modifiedDmg = player.ModifierHandler.GetModifierValue(Damage, Modifier.EType.DmgTaken);
+		Intent.UpdateCurrentText(modifiedDmg);
+	}
 }

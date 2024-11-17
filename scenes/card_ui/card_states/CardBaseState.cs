@@ -39,7 +39,7 @@ public partial class CardBaseState : CardState {
         }
 
         CardUI.CardVisuals.SetPanelStyle(CardVisuals.EPanelStyle.Hover);
-        EventDispatcher.TriggerEvent(Tooltip.Event.ShowTips, CardUI.Card.Icon, CardUI.Card.ToolTipTxt);
+        CardUI.RequestTooltip();
     }
 
     public override void OnMouseExited() {

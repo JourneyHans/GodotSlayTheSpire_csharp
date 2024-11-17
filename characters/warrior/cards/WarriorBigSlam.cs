@@ -21,4 +21,17 @@ public partial class WarriorBigSlam : Card {
 		statusEffect.Status = exposed;
 		statusEffect.Execute(targets);
 	}
+
+	public override string GetDefaultTooltip() {
+		return string.Format(ToolTipTxt, _baseDamage, _exposedDuration);
+	}
+
+	public override string GetUpdatedTooltip(ModifierHandler playerModifiers, ModifierHandler enemyModifiers) {
+		var modifiedDmg = playerModifiers.GetModifierValue(_baseDamage, Modifier.EType.DmgDealt);
+		if (enemyModifiers != null) {
+			modifiedDmg = enemyModifiers.GetModifierValue(modifiedDmg, Modifier.EType.DmgTaken);
+		}
+
+		return string.Format(ToolTipTxt, modifiedDmg, _exposedDuration);
+	}
 }

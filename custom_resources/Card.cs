@@ -10,9 +10,11 @@ public partial class Card : Resource {
         Skill,
         Power,
     }
-    
+
     public enum ERarity {
-        Common, UnCommon, Rare
+        Common,
+        UnCommon,
+        Rare
     }
 
     public enum ETarget {
@@ -66,6 +68,14 @@ public partial class Card : Resource {
     }
 
     protected virtual void ApplyEffect(Array<Node2D> targets, ModifierHandler modifierHandler) {
-        
+
+    }
+
+    public virtual string GetDefaultTooltip() {
+        return ToolTipTxt;
+    }
+
+    public virtual string GetUpdatedTooltip(ModifierHandler playerModifiers, ModifierHandler enemyModifiers) {
+        return ToolTipTxt;
     }
 }

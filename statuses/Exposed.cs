@@ -34,4 +34,8 @@ public partial class Exposed : Status {
 			_dmgTakenModifier.RemoveValue("exposed");
 		}
 	}
+
+	public override string GetToolTip() {
+		return string.Format(ToolTip, Duration);
+	}
 }

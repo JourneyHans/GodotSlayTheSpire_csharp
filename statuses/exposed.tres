@@ -12,4 +12,4 @@ CanExpire = true
 Duration = 1
 Stacks = 0
 Icon = ExtResource("1_2htwt")
-ToolTip = "expose TODO"
+ToolTip = "Exposed: takes 50% more damange for {0} turns."

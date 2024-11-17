@@ -33,7 +33,7 @@ public partial class CardTooltipPopup : Control {
         _tooltipCard.AddChild(newCard);
         newCard.Card = card;
         newCard.SetClickCall(_ => HideTooltip());
-        _cardDescription.Text = card.ToolTipTxt;
+        _cardDescription.Text = card.GetDefaultTooltip();
         Show();
     }
 

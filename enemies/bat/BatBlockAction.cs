@@ -12,4 +12,8 @@ public partial class BatBlockAction : EnemyAction {
 
 		GetTree().CreateTimer(0.6, false).Timeout += EnemyActionCompleted;
 	}
+
+	public override void UpdateIntentText() {
+		Intent.UpdateCurrentText(Block);
+	}
 }

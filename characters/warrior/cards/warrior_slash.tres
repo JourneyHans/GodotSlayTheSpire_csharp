@@ -13,5 +13,5 @@ Target = 2
 Cost = 2
 Exhausts = false
 Icon = ExtResource("1_tyyur")
-ToolTipTxt = "[center] Deal [color=\"ff0000\"]4[/color] damage to all enemies.[/center]"
+ToolTipTxt = "[center] Deal [color=\"ff0000\"]{0}[/color] damage to all enemies.[/center]"
 Sound = ExtResource("2_t721w")

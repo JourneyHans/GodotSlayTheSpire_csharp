@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using framework.events;
 using framework.extension;
 using Godot;
 using Godot.Collections;
@@ -9,6 +10,10 @@ public partial class StatusHandler : GridContainer {
     private const float StatusApplyInterval = 0.25f;
     
     [Export] public Node2D StatusOwner;
+
+    public override void _Ready() {
+        GuiInput += OnGuiInput;
+    }
 
     public void ApplyStatusesByType(Status.EType type) {
         if (type == Status.EType.EventBased) {
@@ -78,6 +83,12 @@ public partial class StatusHandler : GridContainer {
     private void OnStatusApplied(Status status) {
         if (status.CanExpire) {
             status.Duration -= 1;
+        }
+    }
+
+    private void OnGuiInput(InputEvent inputEvent) {
+        if (inputEvent.IsActionPressed(InputKey.LeftMouse)) {
+            EventDispatcher.TriggerEvent(StatusView.Event.StatusTooltipRequested, GetAllStatuses());
         }
     }
 }

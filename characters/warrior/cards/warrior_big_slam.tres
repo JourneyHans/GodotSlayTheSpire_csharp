@@ -13,5 +13,5 @@ Target = 1
 Cost = 2
 Exhausts = true
 Icon = ExtResource("1_ibsto")
-ToolTipTxt = "[center]Deal [color=\"ff0000\"]10[/color] damage and apply 2 [color=\"ffdf00\"]Exposed[/color].[/center]"
+ToolTipTxt = "[center]Deal [color=\"ff0000\"]{0}[/color] damage and apply {1} [color=\"ffdf00\"]Exposed[/color].[/center]"
 Sound = ExtResource("2_i58ns")

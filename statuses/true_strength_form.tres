@@ -12,4 +12,4 @@ CanExpire = false
 Duration = 0
 Stacks = 0
 Icon = ExtResource("1_qxqjf")
-ToolTip = "true_strength_form TODO"
+ToolTip = "True Strength Form: at the start of its turn, gains 2 Muscle."

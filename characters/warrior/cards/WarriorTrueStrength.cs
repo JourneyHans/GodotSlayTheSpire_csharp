@@ -4,13 +4,18 @@ using Godot;
 using Godot.Collections;
 
 public partial class WarriorTrueStrength : Card {
-	private static readonly TrueStrengthForm TrueStrengthForm =
-		SimpleLoader.LoadResource<TrueStrengthForm>("res://statuses/true_strength_form");
-	
 	protected override void ApplyEffect(Array<Node2D> targets, ModifierHandler modifierHandler) {
 		StatusEffect statusEffect = new();
-		var trueStrengthForm = TrueStrengthForm.Duplicate<TrueStrengthForm>();
+		TrueStrengthForm trueStrengthForm = TrueStrengthForm.Duplicate();
 		statusEffect.Status = trueStrengthForm;
 		statusEffect.Execute(targets);
+	}
+
+	public override string GetDefaultTooltip() {
+		return string.Format(ToolTipTxt, TrueStrengthForm.TrueStrengthFormRes.StacksPerTurn);
+	}
+
+	public override string GetUpdatedTooltip(ModifierHandler playerModifiers, ModifierHandler enemyModifiers) {
+		return GetDefaultTooltip();
 	}
 }

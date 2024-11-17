@@ -9,7 +9,7 @@ public partial class TrueStrengthForm : Status {
 	private FinchLogger _logger;
 	private static readonly Muscle MuscleRes = SimpleLoader.LoadResource<Muscle>("res://statuses/muscle");
 
-	private int _stacksPerTurn = 2;
+	public int StacksPerTurn = 2;
 	
 	public override void InitializeStatus(Node2D target) {
 		_logger = new FinchLogger(this);
@@ -20,10 +20,19 @@ public partial class TrueStrengthForm : Status {
 
 		StatusEffect statusEffect = new();
 		Muscle muscle = MuscleRes.Duplicate<Muscle>();
-		muscle.Stacks = _stacksPerTurn;
+		muscle.Stacks = StacksPerTurn;
 		statusEffect.Status = muscle;
 		statusEffect.Execute(new Array<Node2D> { target });
 		
 		base.ApplyStatus(target);
+	}
+}
+
+public partial class TrueStrengthForm {
+	public static readonly TrueStrengthForm TrueStrengthFormRes =
+		SimpleLoader.LoadResource<TrueStrengthForm>("res://statuses/true_strength_form");
+
+	public static TrueStrengthForm Duplicate() {
+		return TrueStrengthFormRes.Duplicate<TrueStrengthForm>();
 	}
 }

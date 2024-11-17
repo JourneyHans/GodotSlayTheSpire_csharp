@@ -24,6 +24,8 @@ public abstract partial class EnemyAction : Node {
 
     public abstract void PerformAction();
 
+    public abstract void UpdateIntentText();
+
     protected virtual void EnemyActionCompleted() {
         EventDispatcher.TriggerEvent(Event.EnemyActionCompleted, Enemy);
     }
