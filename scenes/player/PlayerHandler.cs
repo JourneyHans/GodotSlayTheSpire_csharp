@@ -1,4 +1,14 @@
-using System;
+/*
+ * Player turn order:
+ * 1. StartOfTurn Relics
+ * 2. StartOfTurn Statuses
+ * 3. Draw Hand
+ * 4. End Turn
+ * 5. EndOfTurn Relics
+ * 6. EndOfTurn Statuses
+ * 7. Discard Hand
+ */
+
 using framework.events;
 using framework.extension;
 using Godot;
@@ -7,6 +17,7 @@ public partial class PlayerHandler : Node {
     private const float HandDrawInterval = 0.25f;
     private const float HandDiscardInterval = 0.25f;
     
+    [Export] public RelicHandler Relics { get; set; }
     [Export] public Player Player { get; private set; }
     [Export] public Hand Hand { get; private set; }
 
@@ -25,6 +36,7 @@ public partial class PlayerHandler : Node {
         CharacterStats.DrawPile = characterStats.Deck.Duplicate<CardPile>(true);
         CharacterStats.DrawPile.Shuffle();
         CharacterStats.Discard = new CardPile();
+        Relics.RelicsActivated += OnRelicsRelicsActivated;
         Player.StatusHandler.StatusesApplied += OnStatusesApplied;
         StartTurn();
     }
@@ -32,12 +44,12 @@ public partial class PlayerHandler : Node {
     public void StartTurn() {
         CharacterStats.Block = 0;
         CharacterStats.ResetMana();
-        Player.StatusHandler.ApplyStatusesByType(Status.EType.StartOfTurn);
+        Relics.ActivateRelicsByType(Relic.EType.StartOfTurn);
     }
 
     public void EndTurn() {
         Hand.DisableHand();
-        Player.StatusHandler.ApplyStatusesByType(Status.EType.EndOfTurn);
+        Relics.ActivateRelicsByType(Relic.EType.EndOfTurn);
     }
 
     private void DrawCards(int amount) {
@@ -94,6 +106,17 @@ public partial class PlayerHandler : Node {
         }
 
         CharacterStats.Discard.AddCard(card);
+    }
+
+    private void OnRelicsRelicsActivated(Relic.EType type) {
+        switch (type) {
+            case Relic.EType.StartOfTurn:
+                Player.StatusHandler.ApplyStatusesByType(Status.EType.StartOfTurn);
+                break;
+            case Relic.EType.EndOfTurn:
+                Player.StatusHandler.ApplyStatusesByType(Status.EType.EndOfTurn);
+                break;
+        }
     }
 
     private void OnStatusesApplied(Status.EType type) {

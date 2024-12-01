@@ -1,0 +1,16 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bvtuqwfs10hvo"]
+
+[ext_resource type="Texture2D" uid="uid://bxa8pkakcodgw" path="res://art/tile_0082.png" id="1_1mxab"]
+[ext_resource type="Script" path="res://relics/ExplosiveBarrel.cs" id="2_jdnko"]
+
+[resource]
+script = ExtResource("2_jdnko")
+_damage = 2
+RelicName = "ExplosiveBarrel"
+Id = "explosive_barrel"
+Type = 0
+CharacterType = 0
+StarterRelic = false
+Icon = ExtResource("1_1mxab")
+Tooltip = "[color=\"ffdf00\"]Explosive Barrel[/color]
+At the start of your turn, deal 2 damage to all enemies."

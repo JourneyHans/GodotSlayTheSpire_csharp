@@ -1,3 +1,4 @@
+using System;
 using framework.events;
 using Godot;
 
@@ -5,6 +6,7 @@ public partial class Battle : Node2D {
     [Export] public BattleStats BattleStats { get; set; }
     [Export] public CharacterStats CharacterStats { get; set; }
     [Export] public AudioStream Music { get; private set; }
+    [Export] public RelicHandler Relics { get; set; }
     
     private PlayerHandler _playerHandler;
     private EnemyHandler _enemyHandler;
@@ -38,11 +40,12 @@ public partial class Battle : Node2D {
         
         _battleUI.CharacterStats = CharacterStats;
         _player.Stats = CharacterStats;
+        _playerHandler.Relics = Relics;
         _enemyHandler.SetupEnemies(BattleStats);
         _enemyHandler.ResetEnemyActions();
         
-        _playerHandler.StartBattle(CharacterStats);
-        _battleUI.InitializedCardPileUI();
+        Relics.RelicsActivated += OnRelicsActivated;
+        Relics.ActivateRelicsByType(Relic.EType.StartOfCombat);
     }
 
     private void OnEnemyTurnEnded() {
@@ -51,15 +54,28 @@ public partial class Battle : Node2D {
     }
 
     private void OnEnemiesChildOrderChanged() {
-        if (_enemyHandler.GetChildCount() == 0) {
-            EventDispatcher.TriggerEvent(BattleOverPanel.Event.BattleOverScreenRequested, "Victorious",
-                BattleOverPanel.Type.Win);
+        if (_enemyHandler.GetChildCount() == 0 &&
+            IsInstanceValid(Relics)) {
+            Relics.ActivateRelicsByType(Relic.EType.EndOfCombat);
         }
     }
 
     private void OnPlayerDied() {
         EventDispatcher.TriggerEvent(BattleOverPanel.Event.BattleOverScreenRequested, "Game Over!",
             BattleOverPanel.Type.Lose);
+    }
+
+    private void OnRelicsActivated(Relic.EType type) {
+        switch (type) {
+            case Relic.EType.StartOfCombat:
+                _playerHandler.StartBattle(CharacterStats);
+                _battleUI.InitializedCardPileUI();
+                break;
+            case Relic.EType.EndOfCombat:
+                EventDispatcher.TriggerEvent(BattleOverPanel.Event.BattleOverScreenRequested, "Victorious",
+                    BattleOverPanel.Type.Win);
+                break;
+        }
     }
 }
 

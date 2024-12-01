@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cndyq45xqcci7"]
+[gd_scene load_steps=11 format=3 uid="uid://cndyq45xqcci7"]
 
 [ext_resource type="Script" path="res://scenes/run/Run.cs" id="1_l3rbg"]
 [ext_resource type="PackedScene" uid="uid://c480noar0rr1a" path="res://scenes/map/map.tscn" id="1_ttuf5"]
@@ -7,7 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://dy11d0ajojfvu" path="res://scenes/ui/card_pile_opener.tscn" id="4_cx7vt"]
 [ext_resource type="Texture2D" uid="uid://ss5c04pnvfbq" path="res://art/deck.png" id="5_uvc60"]
 [ext_resource type="PackedScene" uid="uid://dmbnto2varoiu" path="res://scenes/ui/health_ui.tscn" id="5_wod4l"]
+[ext_resource type="PackedScene" uid="uid://cc1o6g8y8qjfp" path="res://scenes/relic_handler/relic_handler.tscn" id="6_4hn2r"]
 [ext_resource type="PackedScene" uid="uid://cy0p3v3daici5" path="res://scenes/ui/card_pile_view.tscn" id="6_gu4hr"]
+[ext_resource type="PackedScene" uid="uid://d1t7ywfjjrlmw" path="res://scenes/relic_handler/relic_tooltip.tscn" id="10_bxtbl"]
 
 [node name="Run" type="Node"]
 script = ExtResource("1_l3rbg")
@@ -79,9 +81,14 @@ ShowMaxHP = true
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Placeholder" type="Control" parent="TopBar/BarItems"]
+[node name="RelicHandlerContainer" type="CenterContainer" parent="TopBar/BarItems"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="RelicHandler" parent="TopBar/BarItems/RelicHandlerContainer" instance=ExtResource("6_4hn2r")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
 
 [node name="DeckButton" parent="TopBar/BarItems" node_paths=PackedStringArray("Counter") instance=ExtResource("4_cx7vt")]
 unique_name_in_owner = true
@@ -100,5 +107,9 @@ text = "99"
 horizontal_alignment = 1
 
 [node name="DeckView" parent="TopBar" instance=ExtResource("6_gu4hr")]
+unique_name_in_owner = true
+visible = false
+
+[node name="RelicTooltipPopup" parent="TopBar" instance=ExtResource("10_bxtbl")]
 unique_name_in_owner = true
 visible = false

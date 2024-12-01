@@ -53,9 +53,9 @@ public partial class Card : Resource {
 
         SceneTree tree = targets[0].GetTree();
         return Target switch {
-            ETarget.Self => tree.Get2DNodesInGroup("player"),
-            ETarget.AllEnemies => tree.Get2DNodesInGroup("enemies"),
-            ETarget.Everyone => tree.Get2DNodesInGroup("player") + tree.Get2DNodesInGroup("enemies"),
+            ETarget.Self => tree.GetNodesInGroup<Node2D>("player"),
+            ETarget.AllEnemies => tree.GetNodesInGroup<Node2D>("enemies"),
+            ETarget.Everyone => tree.GetNodesInGroup<Node2D>("player") + tree.GetNodesInGroup<Node2D>("enemies"),
             _ => null
         };
     }

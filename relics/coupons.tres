@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Relic" load_steps=2 format=3 uid="uid://dlcu4e1utrudt"]
+
+[ext_resource type="Script" path="res://custom_resources/Relic.cs" id="1_1hnkg"]
+
+[resource]
+script = ExtResource("1_1hnkg")
+RelicName = "Coupons"
+Id = "coupons"
+Type = 4
+CharacterType = 0
+StarterRelic = false
+Tooltip = "[color=\"ffdf00\"]Coupons[/color]
+All items in the shop are discounted by 50%."

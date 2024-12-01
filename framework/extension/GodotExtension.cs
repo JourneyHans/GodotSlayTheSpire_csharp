@@ -27,6 +27,12 @@ public static class GodotObjectExtension {
         }
     }
 
+    public static void FreeAllChildren(this Node parent) {
+        foreach (Node child in parent.GetChildren()) {
+            child.Free();
+        }
+    }
+
     public static void Shake(this Node2D node2D, float strength, float duration, int shakeCount = 10) {
         if (node2D == null) {
             return;
@@ -77,6 +83,10 @@ public static class TweenExtension {
     public static PropertyTweener DoMove(this Tween tween, GodotObject target, Variant end, float duration) {
         return tween.TweenProperty(target, "global_position", end, duration);
     }
+
+    public static PropertyTweener DoMoveX(this Tween tween, GodotObject target, Variant end, float duration) {
+        return tween.TweenProperty(target, "position:x", end, duration);
+    }
 }
 
 #endregion
@@ -84,15 +94,17 @@ public static class TweenExtension {
 #region SceneTreeExtension
 
 public static class SceneTreeExtension {
-    public static Array<Node2D> Get2DNodesInGroup(this SceneTree tree, StringName group) {
+#pragma warning disable GD0302
+    public static Array<T> GetNodesInGroup<T>(this SceneTree tree, StringName group) where T : Node {
         Array<Node> result = tree.GetNodesInGroup(group);
-        Array<Node2D> nodes = new Array<Node2D>();
+        Array<T> nodes = new Array<T>();
         foreach (Node node in result) {
-            nodes.Add((Node2D)node);
+            nodes.Add((T)node);
         }
 
         return nodes;
     }
+#pragma warning restore GD0302
 }
 
 #endregion
@@ -108,5 +120,21 @@ public static class ArrayExtension {
 }
 
 #pragma warning restore GD0302
+
+#endregion
+
+#region ControlExtension
+
+// TODO: 后续把这种常量放到另一个文件，例如GodotConst
+public static class ThemeConstantKey {
+    public const string Separation = "separation";
+}
+
+public static class ControlExtension {
+    
+    public static int GetSeparation(this Control control) {
+        return control.GetThemeConstant(ThemeConstantKey.Separation);
+    }
+}
 
 #endregion

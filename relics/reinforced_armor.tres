@@ -1,0 +1,16 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dhory5assvfgr"]
+
+[ext_resource type="Texture2D" uid="uid://dytq0eumwvky6" path="res://art/tile_0074.png" id="1_grx46"]
+[ext_resource type="Script" path="res://relics/ReinforcedArmor.cs" id="2_d2iit"]
+
+[resource]
+script = ExtResource("2_d2iit")
+_blockBonus = 3
+RelicName = "Armor"
+Id = "armor"
+Type = 2
+CharacterType = 2
+StarterRelic = false
+Icon = ExtResource("1_grx46")
+Tooltip = "[color=\"ffdf00\"]Reinforced Armor[/color]
+At the end of your turn, gain 3 block."

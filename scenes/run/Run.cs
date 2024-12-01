@@ -20,6 +20,8 @@ public partial class Run : Node {
     private Node _currentView;
     private HealthUI _healthUI;
     private GoldUI _goldUI;
+    private RelicHandler _relicHandler;
+    private RelicTooltip _relicTooltip;
     private CardPileOpener _deckButton;
     private CardPileView _deckView;
 
@@ -39,6 +41,8 @@ public partial class Run : Node {
         _currentView = GetNode<Node>("CurrentView");
         _healthUI = GetNode<HealthUI>("%HealthUI");
         _goldUI = GetNode<GoldUI>("%GoldUI");
+        _relicHandler = GetNode<RelicHandler>("%RelicHandler");
+        _relicTooltip = GetNode<RelicTooltip>("%RelicTooltipPopup");
         _deckButton = GetNode<CardPileOpener>("%DeckButton");
         _deckView = GetNode<CardPileView>("%DeckView");
 
@@ -100,6 +104,7 @@ public partial class Run : Node {
         _healthUI.UpdaeteStates(_characterStats);
         _characterStats.OnStateChanged += OnCharacterStatsChanged;
         _goldUI.RunStats = _runStats;
+        _relicHandler.AddRelic(_characterStats.StartingRelic);
         _deckButton.CardPile = _characterStats.Deck;
         _deckView.CardPile = _characterStats.Deck;
         _deckButton.Pressed += () => { _deckView.ShowCurrentView("Deck"); };
@@ -112,6 +117,7 @@ public partial class Run : Node {
         EventDispatcher.RegEventListener<Room>(Map.Event.MapExited, OnMapExited);
         EventDispatcher.RegEventListener(Shop.Event.ShopExited, ShowMap);
         EventDispatcher.RegEventListener(TreasureRoom.Event.TreasureRoomExited, ShowMap);
+        EventDispatcher.RegEventListener<Relic>(RelicTooltip.Event.RelicTooltipRequest, _relicTooltip.ShowTooltip);
 
         _btnNameToPressed = new Dictionary<string, Action> {
             { "%MapButton", ShowMap },
@@ -133,6 +139,8 @@ public partial class Run : Node {
         EventDispatcher.UnRegEventListener<Room>(Map.Event.MapExited, OnMapExited);
         EventDispatcher.UnRegEventListener(Shop.Event.ShopExited, ShowMap);
         EventDispatcher.UnRegEventListener(TreasureRoom.Event.TreasureRoomExited, ShowMap);
+        EventDispatcher.UnRegEventListener<Relic>(RelicTooltip.Event.RelicTooltipRequest, _relicTooltip.ShowTooltip);
+        
         _characterStats.OnStateChanged -= OnCharacterStatsChanged;
     }
 
@@ -144,6 +152,7 @@ public partial class Run : Node {
         var battleScene = (Battle)ChangeView(_battleScene);
         battleScene.CharacterStats = _characterStats;
         battleScene.BattleStats = room.BattleStats;
+        battleScene.Relics = _relicHandler;
         battleScene.StartBattle();
     }
 
